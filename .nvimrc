@@ -115,11 +115,6 @@ endif
 " Support all kind of EOLs by default.
 set fileformats+=mac
 
-" Allow color schemes to do bright colors without forcing bold.
-if &t_Co == 8 && $TERM !~# '^linux'
-  set t_Co=16
-endif
-
 " `Ctrl-U` in insert mode deletes a lot. Use `Ctrl-G` u to first break undo,
 " so that you can undo `Ctrl-U` without undoing what you typed before it.
 inoremap <C-U> <C-G>u<C-U>
@@ -261,9 +256,6 @@ nmap <leader>eh :e ~/
 " Show undo tree
 nmap <silent> <leader>u :GundoToggle<CR>
 
-" Fuzzy find files
-nnoremap <silent> <Leader>p :CtrlP<CR>
-
 let g:ctrlp_max_files=0
 let g:ctrlp_show_hidden=1
 let g:ctrlp_custom_ignore = { 'dir': '\v[\/](.git|.cabal-sandbox)$' }
@@ -332,9 +324,9 @@ endfunction
 
 " Save unamed register into register 'a'
 nmap <silent> <leader>a :call SaveRegister()<cr>
-" Pasta from register 'a'
+" Paste from register 'a'
 nmap <leader>p "ap
-" Pasta from register 'a'
+" Paste from register 'a'
 vmap <leader>p "ap
 
 " Close nerdtree after a file is selected
