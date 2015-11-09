@@ -445,3 +445,8 @@ nnoremap <silent> <leader>qc :cclose<cr>
 nnoremap <silent> <leader>[ :cfirst<cr>
 nnoremap <silent> <leader>] :cnext<cr>
 
+" Remap H and L (top, bottom of screen to left and right end of line)
+noremap H ^
+noremap L $
+vnoremap L g_
+
