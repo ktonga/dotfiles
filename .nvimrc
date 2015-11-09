@@ -440,8 +440,8 @@ nnoremap <Leader>ev :edit $MYVIMRC<Cr>
 map / <Plug>(incsearch-forward)
 map ? <Plug>(incsearch-backward)
 
-nnoremap <leader>qo :copen<cr>
-nnoremap <leader>qc :cclose<cr>
-nnoremap <leader>qf :cfirst<cr>
-nnoremap <leader>qn :cnext<cr>
+nnoremap <silent> <leader>qq :botright cwindow<cr>
+nnoremap <silent> <leader>qc :cclose<cr>
+nnoremap <silent> <leader>[ :cfirst<cr>
+nnoremap <silent> <leader>] :cnext<cr>
 
