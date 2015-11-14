@@ -190,6 +190,9 @@ set smartcase
 " Use dash as word separator.
 set iskeyword+=-
 
+" Keep cursor position when switching buffers
+set nostartofline
+
 " Disable output, vcs, archive, rails, temp and backup files.
 set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
 set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
@@ -252,6 +255,8 @@ nmap <leader>ep :e <C-R>=expand("%:p:h") . '/'<CR>
 
 " Open file prompt with home prefix
 nmap <leader>eh :e ~/
+" Open file prompt for SELECTED text
+vmap <leader>eh :e ~/Projects
 
 " Show undo tree
 nmap <silent> <leader>u :GundoToggle<CR>
