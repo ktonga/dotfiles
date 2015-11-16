@@ -447,3 +447,6 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
+" Include all sources for FML
+let g:fml_all_sources=1
+
