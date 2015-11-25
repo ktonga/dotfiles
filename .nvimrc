@@ -35,8 +35,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Haskell
-Plug 'raichoo/haskell-vim'
-Plug 'enomsg/vim-haskellConcealPlus'
+Plug 'dag/vim2hs'
+Plug 'lukerandall/haskellmode-vim'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'Twinside/vim-hoogle'
@@ -389,6 +389,14 @@ nnoremap <silent> <leader>g? :call CommittedFiles()<CR>:copen<CR>
 
 
 set completeopt+=longest
+
+au BufEnter *.hs compiler ghc
+
+let g:haddock_browser = $BROWSER
+
+" Disable haskell-vim omnifunc
+let g:haskellmode_completion_ghc = 0
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " Show types in completion suggestions
 let g:necoghc_enable_detailed_browse = 1
