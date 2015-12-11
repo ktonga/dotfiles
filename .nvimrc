@@ -458,3 +458,5 @@ vnoremap L g_
 " Include all sources for FML
 let g:fml_all_sources=1
 
+call camelcasemotion#CreateMotionMappings('<leader>')
+
