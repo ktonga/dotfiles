@@ -6,7 +6,7 @@ Plug 'Shougo/vimproc.vim'
 Plug 'scrooloose/syntastic'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'vim-scripts/gitignore'
+" Plug 'vim-scripts/gitignore'
 Plug 'tpope/vim-repeat'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
@@ -459,4 +459,20 @@ vnoremap L g_
 let g:fml_all_sources=1
 
 call camelcasemotion#CreateMotionMappings('<leader>')
+
+" Swap p and gp behavior
+noremap p gp
+noremap p gp
+noremap gP P
+noremap gP P
+
+" Spelling highlight when in current line
+hi SpellBad cterm=underline
+
+" Fast wrap in pairs
+nnoremap <leader>( :normal ysiw(<cr>
+nnoremap <leader>) :normal ysiw)<cr>
+nnoremap <leader>{ :normal ysiw{<cr>
+nnoremap <leader>} :normal ysiw}<cr>
+nnoremap <leader>" :normal ysiw"<cr>
 
