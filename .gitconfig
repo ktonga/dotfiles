@@ -1,7 +1,7 @@
-[core]
-	excludesfile = /home/gaston/.gitignore_global
 [user]
 	email = gaston.tonietti@gmail.com
 	name = Gaston Tonietti
 [push]
 	default = simple
+[merge]
+  tool = kdiff3
