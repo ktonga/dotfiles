@@ -4,6 +4,8 @@ target/
 *.swp
 *.orig
 .tags
-/tags
+**/tags
 .ensime
 .ensime_cache/
+.history
+quickfix.sbt
