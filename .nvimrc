@@ -34,6 +34,10 @@ Plug 'jiangmiao/auto-pairs'
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
 
+" Markdown support (depends on tabular)
+Plug 'plasticboy/vim-markdown'
+Plug 'JamshedVesuna/vim-markdown-preview'
+
 " Haskell
 Plug 'dag/vim2hs'
 Plug 'lukerandall/haskellmode-vim'
@@ -462,17 +466,17 @@ call camelcasemotion#CreateMotionMappings('<leader>')
 
 " Swap p and gp behavior
 noremap p gp
-noremap p gp
-noremap gP P
+noremap P gP
+noremap gp p
 noremap gP P
 
 " Spelling highlight when in current line
 hi SpellBad cterm=underline
 
-" Fast wrap in pairs
-nnoremap <leader>( :normal ysiw(<cr>
-nnoremap <leader>) :normal ysiw)<cr>
-nnoremap <leader>{ :normal ysiw{<cr>
-nnoremap <leader>} :normal ysiw}<cr>
-nnoremap <leader>" :normal ysiw"<cr>
+tnoremap <leader><Esc> <C-\><C-n>
+
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
 
