@@ -31,6 +31,7 @@ Plug 'tpope/vim-surround'
 Plug 'godlygeek/tabular'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'jiangmiao/auto-pairs'
+Plug 'wellle/targets.vim'
 
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
