@@ -343,21 +343,10 @@ vmap <leader>p "ap
 " Close nerdtree after a file is selected
 let NERDTreeQuitOnOpen = 1
 
-function! IsNERDTreeOpen()
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-function! ToggleFindNerd()
-  if IsNERDTreeOpen()
-    exec ':NERDTreeToggle'
-  else
-    exec ':NERDTreeFind'
-  endif
-endfunction
-
-" If nerd tree is closed, find current file, if open, close it
-nmap <silent> <leader>f <ESC>:call ToggleFindNerd()<CR>
-nmap <silent> <leader>F <ESC>:NERDTreeToggle<CR>
+" Open NERDTree and focus current file
+nmap <silent> <leader>f <ESC>:NERDTreeFind<CR>
+" Toggle NERDTree window
+nmap <silent> <leader>t <ESC>:NERDTreeToggle<CR>
 
 
 let g:extradite_width = 60
