@@ -10,7 +10,8 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
-Plug 'Valloric/YouCompleteMe'
+" Plug 'Valloric/YouCompleteMe'
+Plug 'Shougo/deoplete.nvim'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -263,7 +264,7 @@ nmap <leader>eh :e ~/
 vmap <leader>eh :e ~/Projects
 
 " Show undo tree
-nmap <silent> <leader>u :GundoToggle<CR>
+nmap <silent> <leader>u :MundoToggle<CR>
 
 let g:ctrlp_max_files=0
 let g:ctrlp_show_hidden=1
@@ -479,4 +480,27 @@ tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
+
+let g:scala_sort_across_groups=1
+let g:scala_first_party_namespaces='au\.com\.cba'
+
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_refresh_always = 1
+
+" Undo completion
+inoremap <expr><C-g> deoplete#mappings#undo_completion()
+
+" Redraw candidates
+inoremap <expr><C-l> deoplete#mappings#refresh()
+
+" deoplete tab-complete
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <Tab> deoplete#mappings#manual_complete()
+inoremap <silent><expr> <C-Space> "\<C-x>\<C-o>"
+
+" let g:deoplete#omni#input_patterns = {}
+" let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
+
 
