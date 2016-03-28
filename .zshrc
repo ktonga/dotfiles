@@ -1,5 +1,5 @@
-# Path to your oh-my-zsh installation.
-export ZSH=/home/gaston/.oh-my-zsh
+
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -51,7 +51,7 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git debian fasd common-aliases)
+plugins=(vi-mode git debian fasd common-aliases history-substring-search)
 
 # User configuration
 
