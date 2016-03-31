@@ -10,7 +10,6 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
-" Plug 'Valloric/YouCompleteMe'
 Plug 'Shougo/deoplete.nvim'
 
 " Git
@@ -21,7 +20,7 @@ Plug 'airblade/vim-gitgutter'
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 
 " Text manipulation
@@ -270,6 +269,8 @@ nmap <silent> <leader>u :MundoToggle<CR>
 let g:ctrlp_max_files=0
 let g:ctrlp_show_hidden=1
 let g:ctrlp_custom_ignore = { 'dir': '\v[\/](.git|.cabal-sandbox)$' }
+let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_mruf_relative = 1
 
 " Return to last edit position when opening files (You want this!)
 augroup last_edit
@@ -292,11 +293,6 @@ else
     \ 'cd %s && git ls-files . -co --exclude-standard',
     \ 'find %s -type f' ]
 endif
-
-" Accept CtrlP selections also with <Space>
-let g:ctrlp_prompt_mappings = {
-  \ 'AcceptSelection("e")': ['<Space>', '<CR>', '<2-LeftMouse>'],
-  \ }
 
 " bind K to grep word under cursor
 nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
@@ -321,10 +317,13 @@ nnoremap <Left> :bn<cr>
 nnoremap <BS> <C-^>
 
 " delete buffer without closing pane
-noremap <leader>bd :Bd<cr>
+nnoremap <leader>d :Bd<cr>
 
 " fuzzy find buffers
-noremap <Tab> :CtrlPBuffer<cr>
+nnoremap <C-n> :CtrlPBuffer<cr>
+
+" fuzzy find MRU files
+nnoremap <C-m> :CtrlPMRUFiles<cr>
 
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
@@ -361,7 +360,7 @@ endfunction
 
 command! -nargs=1 GGrep call NonintrusiveGitGrep(<q-args>)
 nmap <leader>gs :Gstatus<CR>
-nmap <leader>gg :copen<CR>:GGrep 
+nmap <leader>gg :copen<CR>:GGrep
 nmap <leader>gl :Extradite!<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gb :Gblame<CR>
@@ -476,7 +475,6 @@ let g:scala_first_party_namespaces='au\.com\.cba'
 
 
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_refresh_always = 1
 
 " Undo completion
 inoremap <expr><C-g> deoplete#mappings#undo_completion()
@@ -493,4 +491,6 @@ inoremap <silent><expr> <C-Space> "\<C-x>\<C-o>"
 " let g:deoplete#omni#input_patterns = {}
 " let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
 
+let vim_markdown_preview_toggle=3
+let vim_markdown_preview_github=1
 
