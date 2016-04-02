@@ -483,13 +483,12 @@ inoremap <expr><C-g> deoplete#mappings#undo_completion()
 inoremap <expr><C-l> deoplete#mappings#refresh()
 
 " deoplete tab-complete
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-" inoremap <silent><expr> <Tab> deoplete#mappings#manual_complete()
-inoremap <silent><expr> <C-Space> "\<C-x>\<C-o>"
+inoremap <C-@> <C-x><C-o>
 
-" let g:deoplete#omni#input_patterns = {}
-" let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
 
 let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
