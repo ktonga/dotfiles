@@ -322,8 +322,8 @@ nnoremap <leader>d :Bd<cr>
 " fuzzy find buffers
 nnoremap <C-n> :CtrlPBuffer<cr>
 
-" fuzzy find MRU files
-nnoremap <C-m> :CtrlPMRUFiles<cr>
+" fuzzy find MRU files (conflicts with CR)
+" nnoremap <C-m> :CtrlPMRUFiles<cr>
 
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
@@ -485,6 +485,7 @@ inoremap <expr><C-l> deoplete#mappings#refresh()
 " deoplete tab-complete
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Ctrl-Space for omnicompletion
 inoremap <C-@> <C-x><C-o>
 
 let g:deoplete#omni_patterns = {}
