@@ -295,7 +295,7 @@ else
 endif
 
 " bind K to grep word under cursor
-nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap <leader>k :grep! <C-R><C-W><CR>:cw<CR>
 
 " bind \ (backward slash) to grep shortcut
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
