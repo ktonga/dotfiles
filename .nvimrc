@@ -11,6 +11,8 @@ Plug 'tpope/vim-repeat'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'Shougo/deoplete.nvim'
+Plug 'junegunn/vim-pseudocl'
+Plug 'junegunn/vim-oblique'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -360,6 +362,7 @@ endfunction
 
 command! -nargs=1 GGrep call NonintrusiveGitGrep(<q-args>)
 nmap <leader>gs :Gstatus<CR>
+nmap <leader>gts :tabedit %<CR>:Gstatus<CR>
 nmap <leader>gg :copen<CR>:GGrep
 nmap <leader>gl :Extradite!<CR>
 nmap <leader>gd :Gdiff<CR>
@@ -436,9 +439,6 @@ inoremap jk <Esc>
 
 nnoremap <Leader>ev :edit $MYVIMRC<Cr>
 
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-
 nnoremap <silent> <leader>qq :botright cwindow<cr>
 nnoremap <silent> <leader>qc :cclose<cr>
 nnoremap <silent> <leader>[ :cfirst<cr>
@@ -489,8 +489,9 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <C-@> <C-x><C-o>
 
 let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
+" let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
 
 let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
 
+let g:oblique#incsearch_highlight_all=1
