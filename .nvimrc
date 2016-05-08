@@ -491,6 +491,9 @@ inoremap <C-@> <C-x><C-o>
 let g:deoplete#omni_patterns = {}
 " let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
 
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
+
 let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
 
