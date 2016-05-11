@@ -8,6 +8,7 @@ Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'vim-scripts/gitignore'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'Shougo/deoplete.nvim'
@@ -133,6 +134,8 @@ xnoremap & :&&<CR>
 " Y yanks from the cursor to the end of line as expected. See :help Y.
 nnoremap Y y$
 
+" Don't move the cursor after yanking
+vnoremap <expr>y "my\"" . v:register . "y`y"
 
 " Use more readable color scheme by default.
 " It works well with `:set colorline` option.
@@ -242,6 +245,15 @@ set title
 hi! link SignColumn LineNr
 hi! link SyntasticErrorSign ErrorMsg
 hi! link SyntasticWarningSign WarningMsg
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
 
 " Use pleasant but very visible search hilighting
 hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
@@ -498,3 +510,4 @@ let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
 
 let g:oblique#incsearch_highlight_all=1
+
