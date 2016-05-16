@@ -319,10 +319,10 @@ nnoremap \ :Ag<SPACE>
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " Open window splits in various places
-nmap <Leader>sh :leftabove  vnew<CR>
-nmap <leader>sl :rightbelow vnew<CR>
-nmap <leader>sk :leftabove  new<CR>
-nmap <leader>sj :rightbelow new<CR>
+nmap <Leader>wh :leftabove  vnew<CR>
+nmap <leader>wl :rightbelow vnew<CR>
+nmap <leader>wk :leftabove  new<CR>
+nmap <leader>wj :rightbelow new<CR>
 
 " previous buffer, next buffer
 nnoremap <Right> :bp<cr>
@@ -338,9 +338,6 @@ nnoremap <C-n> :CtrlPBuffer<cr>
 
 " fuzzy find MRU files (conflicts with CR)
 " nnoremap <C-m> :CtrlPMRUFiles<cr>
-
-" Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
 
 function! SaveRegister()
   let @a = @"
@@ -396,6 +393,13 @@ endfunction
 " Show list of last-committed files
 nnoremap <silent> <leader>g? :call CommittedFiles()<CR>:copen<CR>
 
+function! GitStatusDo(filter, cmd)
+  execute "args " . system("git status --porcelain | grep '" . a:filter . "' | awk '{ print $2 }' | xargs")
+  execute "argdo " . a:cmd
+endfunction
+
+" Sort imports on all modified Scala files
+nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| update")<CR>
 
 set completeopt+=longest
 
