@@ -6,7 +6,6 @@ Plug 'Shougo/vimproc.vim'
 Plug 'scrooloose/syntastic'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'vim-scripts/gitignore'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'haya14busa/incsearch.vim'
@@ -34,6 +33,7 @@ Plug 'godlygeek/tabular'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'jiangmiao/auto-pairs'
 Plug 'wellle/targets.vim'
+Plug 'vim-scripts/ReplaceWithRegister'
 
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -77,6 +77,9 @@ endif
 if has('syntax')
   syntax enable
 endif
+
+" Disable folding
+set nofoldenable
 
 " Use the system register *
 set clipboard=unnamedplus
@@ -421,20 +424,20 @@ nmap <silent> <leader>hT :GhcModTypeInsert<CR>
 " GHC errors and warnings
 nmap <silent> <leader>hc :SyntasticCheck ghc_mod<CR>
 " Haskell Lint
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell'] }
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell', 'scala'] }
 nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
 
 " Hoogle the word under the cursor
 nnoremap <silent> <leader>hh :Hoogle<CR>
 
 " Hoogle and prompt for input
-nnoremap <leader>hH :Hoogle 
+nnoremap <leader>hH :Hoogle
 
 " Hoogle for detailed documentation (e.g. "Functor")
 nnoremap <silent> <leader>hi :HoogleInfo<CR>
 
 " Hoogle for detailed documentation and prompt for input
-nnoremap <leader>hI :HoogleInfo 
+nnoremap <leader>hI :HoogleInfo
 
 " Hoogle, close the Hoogle window
 nnoremap <silent> <leader>hz :HoogleClose<CR>
@@ -457,8 +460,6 @@ nnoremap <Leader>ev :edit $MYVIMRC<Cr>
 
 nnoremap <silent> <leader>qq :botright cwindow<cr>
 nnoremap <silent> <leader>qc :cclose<cr>
-nnoremap <silent> <leader>[ :cfirst<cr>
-nnoremap <silent> <leader>] :cnext<cr>
 
 " Remap H and L (top, bottom of screen to left and right end of line)
 noremap H ^
@@ -515,3 +516,9 @@ let vim_markdown_preview_github=1
 
 let g:oblique#incsearch_highlight_all=1
 
+nnoremap <silent> <leader>sd :EnDeclaration<cr>
+nnoremap <silent> <leader>sb :EnDocBrowser<cr>
+nnoremap <silent> <leader>st :EnType<cr>
+
+" let g:AutoPairsShortcutToggle=''
+" nnoremap <M-p> :let g:ctrlp_default_input = expand('<cword>')<cr>:CtrlP<cr>
