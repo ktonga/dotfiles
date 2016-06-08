@@ -34,6 +34,9 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'jiangmiao/auto-pairs'
 Plug 'wellle/targets.vim'
 Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'Shougo/neosnippet'
+Plug 'honza/vim-snippets'
+Plug 'Shougo/neosnippet-snippets'
 
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -499,11 +502,39 @@ inoremap <expr><C-g> deoplete#mappings#undo_completion()
 " Redraw candidates
 inoremap <expr><C-l> deoplete#mappings#refresh()
 
-" deoplete tab-complete
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Ctrl-Space for omnicompletion
 inoremap <C-@> <C-x><C-o>
+
+" <CR>: If popup menu visible, expand snippet or close popup with selection,
+"       Otherwise, check if within empty pair and use delimitMate.
+imap <silent><expr><CR> pumvisible() ?
+      \ (neosnippet#expandable() ? neosnippet#mappings#expand_impl()
+      \ : deoplete#mappings#close_popup())
+      \ : "\<CR>"
+
+" inoremap <silent><expr><CR> neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl() : "\<CR>"
+
+" <Tab> completion:
+" 1. If popup menu is visible, select and insert next item
+" 2. Otherwise, if within a snippet, jump to next input
+" 3. Otherwise, if preceding chars are whitespace, insert tab char
+" 4. Otherwise, start manual autocomplete
+imap <silent><expr><Tab> pumvisible() ? "\<C-n>"
+      \ : (neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl()
+      \ : (<SID>is_whitespace() ? "\<Tab>"
+      \ : deoplete#mappings#manual_complete()))
+
+smap <silent><expr><Tab> pumvisible() ? "\<C-n>"
+      \ : (neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl()
+      \ : (<SID>is_whitespace() ? "\<Tab>"
+      \ : deoplete#mappings#manual_complete()))
+
+imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:is_whitespace()
+  let col = col('.') - 1
+  return ! col || getline('.')[col - 1] =~? '\s'
+endfunction
 
 let g:deoplete#omni_patterns = {}
 " let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
@@ -517,8 +548,20 @@ let vim_markdown_preview_github=1
 let g:oblique#incsearch_highlight_all=1
 
 nnoremap <silent> <leader>sd :EnDeclaration<cr>
-nnoremap <silent> <leader>sb :EnDocBrowser<cr>
+nnoremap <silent> <leader>sb :EnDocBrowse<cr>
 nnoremap <silent> <leader>st :EnType<cr>
 
 " let g:AutoPairsShortcutToggle=''
 " nnoremap <M-p> :let g:ctrlp_default_input = expand('<cword>')<cr>:CtrlP<cr>
+
+" disable all runtime snippets
+" let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
+
+" let g:neosnippet#enable_completed_snippet = 1
+
+" Enable snipMate compatibility feature.
+" let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+" let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
+
