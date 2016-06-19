@@ -340,7 +340,11 @@ nnoremap <BS> <C-^>
 nnoremap <leader>d :Bd<cr>
 
 " fuzzy find buffers
-nnoremap <C-n> :CtrlPBuffer<cr>
+nnoremap <Tab> :CtrlPBuffer<cr>
+
+let g:ctrlp_map = '<leader>o'
+
+nnoremap <C-p> <C-i>
 
 " fuzzy find MRU files (conflicts with CR)
 " nnoremap <C-m> :CtrlPMRUFiles<cr>
