@@ -555,17 +555,14 @@ nnoremap <silent> <leader>sd :EnDeclaration<cr>
 nnoremap <silent> <leader>sb :EnDocBrowse<cr>
 nnoremap <silent> <leader>st :EnType<cr>
 
-" let g:AutoPairsShortcutToggle=''
-" nnoremap <M-p> :let g:ctrlp_default_input = expand('<cword>')<cr>:CtrlP<cr>
-
 " disable all runtime snippets
 " let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
 
-" let g:neosnippet#enable_completed_snippet = 1
+let g:neosnippet#enable_completed_snippet = 1
 
 " Enable snipMate compatibility feature.
-" let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#enable_snipmate_compatibility = 1
 
 " Tell Neosnippet about the other snippets
-" let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
+let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
