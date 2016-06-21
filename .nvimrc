@@ -540,11 +540,12 @@ function! s:is_whitespace()
   return ! col || getline('.')[col - 1] =~? '\s'
 endfunction
 
-let g:deoplete#omni_patterns = {}
-" let g:deoplete#omni_patterns.scala = '[^. *\t]\.\w*'
-
 let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.scala = '[^. *\t]\.\w*'
+let g:deoplete#omni#input_patterns.scala = [
+  \ '[^. *\t]\.\w*',
+  \ '[:\[,] ?\w*',
+  \ '^import .*'
+  \]
 
 let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
@@ -556,7 +557,7 @@ nnoremap <silent> <leader>sb :EnDocBrowse<cr>
 nnoremap <silent> <leader>st :EnType<cr>
 
 " disable all runtime snippets
-" let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
+let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
 
 let g:neosnippet#enable_completed_snippet = 1
 
