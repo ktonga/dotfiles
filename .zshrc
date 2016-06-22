@@ -51,7 +51,7 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(vi-mode git debian fasd common-aliases history-substring-search)
+plugins=(vi-mode git debian brew fasd common-aliases history-substring-search docker)
 
 # User configuration
 
@@ -93,4 +93,6 @@ export TERM='xterm-256color'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 unalias ag
+
+alias psgrep="ps aux | grep "
 
