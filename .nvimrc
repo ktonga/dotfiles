@@ -37,6 +37,7 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'Shougo/neosnippet'
 Plug 'honza/vim-snippets'
 Plug 'Shougo/neosnippet-snippets'
+Plug 'tpope/vim-abolish'
 
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -325,10 +326,15 @@ nnoremap \ :Ag<SPACE>
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " Open window splits in various places
-nmap <Leader>wh :leftabove  vnew<CR>
-nmap <leader>wl :rightbelow vnew<CR>
-nmap <leader>wk :leftabove  new<CR>
-nmap <leader>wj :rightbelow new<CR>
+" ------------------------------------
+" Open split to the left
+nmap <Leader>nh :leftabove  vnew<CR>
+" Open split to the right
+nmap <leader>nl :rightbelow vnew<CR>
+" Open split above
+nmap <leader>nk :leftabove  new<CR>
+" Open split below
+nmap <leader>nj :rightbelow new<CR>
 
 " previous buffer, next buffer
 nnoremap <Right> :bp<cr>
@@ -487,8 +493,10 @@ noremap gP P
 " Spelling highlight when in current line
 hi SpellBad cterm=underline
 
+" Send Esc to vim when in the terminal
 tnoremap <leader><Esc> <C-\><C-n>
 
+" Move to a different window when in the terminal
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
@@ -552,9 +560,13 @@ let vim_markdown_preview_github=1
 
 let g:oblique#incsearch_highlight_all=1
 
-nnoremap <silent> <leader>sd :EnDeclaration<cr>
-nnoremap <silent> <leader>sb :EnDocBrowse<cr>
-nnoremap <silent> <leader>st :EnType<cr>
+autocmd FileType scala call <SID>EnMappings()
+
+function! s:EnMappings()
+  nnoremap <buffer> <silent> <Leader>st :EnType<CR>
+  nnoremap <buffer> <silent> K :EnDocBrowse<CR>
+  nnoremap <buffer> <silent> <C-]> :EnDeclaration<CR>
+endfunction
 
 " disable all runtime snippets
 let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
