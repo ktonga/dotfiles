@@ -56,6 +56,7 @@ Plug 'Twinside/vim-hoogle'
 " Scala
 Plug 'derekwyatt/vim-sbt'
 Plug 'derekwyatt/vim-scala'
+Plug 'GEverding/vim-hocon'
 Plug 'ensime/ensime-vim'
 
 " Colorscheme
@@ -571,7 +572,7 @@ endfunction
 " disable all runtime snippets
 let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
 
-let g:neosnippet#enable_completed_snippet = 1
+" let g:neosnippet#enable_completed_snippet = 1
 
 " Enable snipMate compatibility feature.
 let g:neosnippet#enable_snipmate_compatibility = 1
