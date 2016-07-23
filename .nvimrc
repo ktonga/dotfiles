@@ -59,6 +59,9 @@ Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
 Plug 'ensime/ensime-vim'
 
+" Python
+Plug 'zchee/deoplete-jedi'
+
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
 
