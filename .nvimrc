@@ -39,6 +39,9 @@ Plug 'honza/vim-snippets'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'tpope/vim-abolish'
 
+" Services
+Plug 'mrtazz/simplenote.vim'
+
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -57,7 +60,7 @@ Plug 'Twinside/vim-hoogle'
 Plug 'derekwyatt/vim-sbt'
 Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
-Plug 'ensime/ensime-vim'
+Plug '~/Projects/ensime-vim'
 
 " Python
 Plug 'zchee/deoplete-jedi'
@@ -150,7 +153,10 @@ vnoremap <expr>y "my\"" . v:register . "y`y"
 
 " Use more readable color scheme by default.
 " It works well with `:set colorline` option.
+set termguicolors
 colorscheme wombat256mod
+
+let g:airline_powerline_fonts = 1
 
 " Highlight line under cursor. It helps with navigation.
 set cursorline
