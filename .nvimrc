@@ -590,8 +590,10 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
 function! s:ChangeListenAddress()
-  call serverstop($NVIM_LISTEN_ADDRESS)
-  call serverstart('/tmp/nvim_' . fnamemodify(getcwd(),':t') . '.sock')
+  if getcwd() =~ '\v.+/Projects/.+' 
+    call serverstop($NVIM_LISTEN_ADDRESS)
+    call serverstart('/tmp/nvim_' . fnamemodify(getcwd(),':t') . '.sock')
+  endif
 endfunction
 
 call <SID>ChangeListenAddress()
