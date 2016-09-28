@@ -584,7 +584,7 @@ let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippet
 function! s:ChangeListenAddress()
   if getcwd() =~ '\v.+/Projects/.+' 
     call serverstop($NVIM_LISTEN_ADDRESS)
-    call serverstart('/tmp/nvim_' . fnamemodify(getcwd(),':t') . '.sock')
+    call serverstart($TMPDIR . 'nvim_' . fnamemodify(getcwd(),':t') . '.sock')
   endif
 endfunction
 
