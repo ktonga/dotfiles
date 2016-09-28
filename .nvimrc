@@ -24,6 +24,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
+Plug 'romainl/vim-qf'
 
 " Text manipulation
 Plug 'simnalamburt/vim-mundo'
