@@ -55,8 +55,11 @@ plugins=(vi-mode git debian brew fasd common-aliases history-substring-search do
 
 # User configuration
 
+MAVEN_HOME="/home/gaston/Apps/maven"
+
 PATH="/home/gaston/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 PATH="/home/gaston/.stack/programs/x86_64-linux/ghc-7.10.2/bin:/home/gaston/.local/bin:/home/gaston/.cabal/bin:/opt/cabal/1.22/bin:/opt/happy/1.19.5/bin:/opt/alex/3.1.4/bin:$PATH"
+PATH="$MAVEN_HOME/bin:$PATH"
 export PATH
 
 # export MANPATH="/usr/local/man:$MANPATH"
