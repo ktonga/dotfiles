@@ -3,7 +3,7 @@ call plug#begin('~/.config/nvim/plugged')
 " Support bundles
 Plug 'jgdavey/tslime.vim'
 Plug 'Shougo/vimproc.vim'
-Plug 'scrooloose/syntastic'
+Plug 'neomake/neomake'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
@@ -24,6 +24,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
+Plug 'romainl/vim-qf'
 
 " Text manipulation
 Plug 'simnalamburt/vim-mundo'
@@ -258,19 +259,11 @@ nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
 " Set window title by default.
 set title
 
-" Adjust signscolumn and syntastic to match wombat
+" Adjust signscolumn to match wombat
 hi! link SignColumn LineNr
-hi! link SyntasticErrorSign ErrorMsg
-hi! link SyntasticWarningSign WarningMsg
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
 
 " Use pleasant but very visible search hilighting
 hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
@@ -445,10 +438,9 @@ nmap <silent> <leader>ht :GhcModType<CR>
 " Insert type of expression under cursor
 nmap <silent> <leader>hT :GhcModTypeInsert<CR>
 " GHC errors and warnings
-nmap <silent> <leader>hc :SyntasticCheck ghc_mod<CR>
+nmap <silent> <leader>hc :Neomake! ghc_mod<CR>
 " Haskell Lint
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell', 'scala'] }
-nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
+nmap <silent> <leader>hl :Neomake! hlint<CR>
 
 " Hoogle the word under the cursor
 nnoremap <silent> <leader>hh :Hoogle<CR>
@@ -592,7 +584,7 @@ let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippet
 function! s:ChangeListenAddress()
   if getcwd() =~ '\v.+/Projects/.+' 
     call serverstop($NVIM_LISTEN_ADDRESS)
-    call serverstart('/tmp/nvim_' . fnamemodify(getcwd(),':t') . '.sock')
+    call serverstart($TMPDIR . 'nvim_' . fnamemodify(getcwd(),':t') . '.sock')
   endif
 endfunction
 

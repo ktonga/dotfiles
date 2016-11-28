@@ -99,3 +99,7 @@ unalias ag
 
 alias psgrep="ps aux | grep "
 
+if [[ -a ~/.zsh_local.sh ]]; then
+  source ~/.zsh_local.sh
+fi
+
