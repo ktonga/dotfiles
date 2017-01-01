@@ -75,6 +75,7 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+export TMPDIR='/tmp/'
 export EDITOR='nvim'
 export BROWSER='google-chrome'
 
