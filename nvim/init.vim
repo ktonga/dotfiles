@@ -505,7 +505,7 @@ tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
 
 let g:scala_sort_across_groups=1
-let g:scala_first_party_namespaces='au\.com\.cba'
+let g:scala_first_party_namespaces='io\.simplemachines'
 
 
 let g:deoplete#enable_at_startup = 1
@@ -589,4 +589,6 @@ function! s:ChangeListenAddress()
 endfunction
 
 call <SID>ChangeListenAddress()
+
+set inccommand=split
 
