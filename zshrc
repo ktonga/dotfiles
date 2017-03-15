@@ -98,8 +98,13 @@ export BROWSER='google-chrome'
 unalias ag
 
 alias psgrep="ps aux | grep "
+alias ammonite="sbt test:console"
 
 if [[ -a ~/.zsh_local.sh ]]; then
   source ~/.zsh_local.sh
+fi
+
+if [[ -a ~/bin/proxy-setenv.sh ]]; then
+  source ~/bin/proxy-setenv.sh
 fi
 
