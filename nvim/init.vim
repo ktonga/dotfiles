@@ -8,7 +8,6 @@ Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
-Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
@@ -56,6 +55,7 @@ Plug 'lukerandall/haskellmode-vim'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'Twinside/vim-hoogle'
+Plug 'enomsg/vim-haskellConcealPlus'
 
 " Scala
 Plug 'derekwyatt/vim-sbt'
@@ -420,7 +420,7 @@ endfunction
 " Sort imports on all modified Scala files
 nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| update")<CR>
 
-set completeopt+=longest
+set completeopt+=menuone,noinsert
 
 au BufEnter *.hs compiler ghc
 
@@ -498,6 +498,18 @@ hi SpellBad cterm=underline
 " Send Esc to vim when in the terminal
 tnoremap <leader><Esc> <C-\><C-n>
 
+" Send Esc to vim when in the terminal
+tnoremap <leader>l <C-\><C-l>
+
+" Open a terminal in a vertical split
+noremap <leader>z :botright vsplit term://zsh<cr>:startinsert<cr>
+
+" Start SBT in a terminal in a vertical split
+noremap <leader>zs :botright vsplit term://sbt<cr>:startinsert<cr>
+
+" Start Ammonite in a terminal in a vertical split
+noremap <leader>za :botright vsplit term://ammonite<cr>:startinsert<cr>
+
 " Move to a different window when in the terminal
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
@@ -517,7 +529,7 @@ inoremap <expr><C-g> deoplete#mappings#undo_completion()
 inoremap <expr><C-l> deoplete#mappings#refresh()
 
 " Ctrl-Space for omnicompletion
-inoremap <C-@> <C-x><C-o>
+inoremap <C-Space> <C-x><C-o>
 
 " <CR>: If popup menu visible, expand snippet or close popup with selection,
 "       Otherwise, check if within empty pair and use delimitMate.
@@ -551,11 +563,11 @@ function! s:is_whitespace()
 endfunction
 
 let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.scala = [
-  \ '[^. *\t]\.\w*',
-  \ '[:\[,] ?\w*',
-  \ '^import .*'
-  \]
+" let g:deoplete#omni#input_patterns.scala = [
+"   \ '[^. *\t]\.\w*',
+"   \ '[:\[,] ?\w*',
+"   \ '^import .*'
+"   \]
 
 let vim_markdown_preview_toggle=3
 let vim_markdown_preview_github=1
@@ -566,6 +578,7 @@ autocmd FileType scala call <SID>EnMappings()
 
 function! s:EnMappings()
   nnoremap <buffer> <silent> <Leader>st :EnType<CR>
+  xnoremap <buffer> <silent> <Leader>st :EnType selection<CR>
   nnoremap <buffer> <silent> K :EnDocBrowse<CR>
   nnoremap <buffer> <silent> <C-]> :EnDeclaration<CR>
 endfunction
@@ -582,7 +595,7 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
 function! s:ChangeListenAddress()
-  if getcwd() =~ '\v.+/Projects/.+' 
+  if getcwd() =~ '\v.+/Projects/.+'
     call serverstop($NVIM_LISTEN_ADDRESS)
     call serverstart($TMPDIR . 'nvim_' . fnamemodify(getcwd(),':t') . '.sock')
   endif
@@ -591,4 +604,6 @@ endfunction
 call <SID>ChangeListenAddress()
 
 set inccommand=split
+
+let ensime_server_v2=1
 
