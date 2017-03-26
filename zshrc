@@ -108,3 +108,6 @@ if [[ -a ~/bin/proxy-setenv.sh ]]; then
   source ~/bin/proxy-setenv.sh
 fi
 
+export FZF_DEFAULT_COMMAND='ag -g ""'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

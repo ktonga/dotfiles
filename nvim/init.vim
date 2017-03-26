@@ -21,9 +21,10 @@ Plug 'airblade/vim-gitgutter'
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'romainl/vim-qf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Text manipulation
 Plug 'simnalamburt/vim-mundo'
@@ -290,12 +291,6 @@ vmap <leader>eh :e ~/Projects
 " Show undo tree
 nmap <silent> <leader>u :MundoToggle<CR>
 
-let g:ctrlp_max_files=0
-let g:ctrlp_show_hidden=1
-let g:ctrlp_custom_ignore = { 'dir': '\v[\/](.git|.cabal-sandbox)$' }
-let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_mruf_relative = 1
-
 " Return to last edit position when opening files (You want this!)
 augroup last_edit
   autocmd!
@@ -304,26 +299,6 @@ augroup last_edit
        \   exe "normal! g`\"" |
        \ endif
 augroup END
-
-" Use Silver Searcher for CtrlP plugin (if available)
-" Fallback to git ls-files for fast listing.
-" Because we use fast strategies, disable caching.
-let g:ctrlp_use_caching = 0
-if executable('ag')
-    set grepprg=ag\ --nogroup\ --nocolor
-    let g:ctrlp_user_command = 'cd %s && ag -l --nocolor -g ""'
-else
-  let g:ctrlp_user_command = ['.git',
-    \ 'cd %s && git ls-files . -co --exclude-standard',
-    \ 'find %s -type f' ]
-endif
-
-" bind K to grep word under cursor
-nnoremap <leader>k :grep! <C-R><C-W><CR>:cw<CR>
-
-" bind \ (backward slash) to grep shortcut
-command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-nnoremap \ :Ag<SPACE>
 
 " Cursor shape
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
@@ -348,15 +323,7 @@ nnoremap <BS> <C-^>
 " delete buffer without closing pane
 nnoremap <leader>d :Bd<cr>
 
-" fuzzy find buffers
-nnoremap <Tab> :CtrlPBuffer<cr>
-
-let g:ctrlp_map = '<leader>o'
-
 nnoremap <C-p> <C-i>
-
-" fuzzy find MRU files (conflicts with CR)
-" nnoremap <C-m> :CtrlPMRUFiles<cr>
 
 function! SaveRegister()
   let @a = @"
@@ -498,7 +465,7 @@ hi SpellBad cterm=underline
 " Send Esc to vim when in the terminal
 tnoremap <leader><Esc> <C-\><C-n>
 
-" Send Esc to vim when in the terminal
+" Send Ctrl-L to vim when in the terminal
 tnoremap <leader>l <C-\><C-l>
 
 " Open a terminal in a vertical split
@@ -606,4 +573,17 @@ call <SID>ChangeListenAddress()
 set inccommand=split
 
 let ensime_server_v2=1
+
+let g:fzf_command_prefix='Fzf'
+
+" fuzzy find buffers
+nnoremap <Tab> :FzfBuffers<cr>
+" fuzzy find files
+nnoremap <leader>o :FzfFiles<cr>
+" fuzzy find MRU
+nnoremap <leader>m :FzfHistory<cr>
+" grep with ag
+nnoremap \ :FzfAg<SPACE>
+" bind K to grep word under cursor
+nnoremap <leader>k :FzfAg <C-R><C-W><CR>
 
