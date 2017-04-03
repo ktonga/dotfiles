@@ -69,6 +69,8 @@ Plug 'zchee/deoplete-jedi'
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
+unlet! g:indentLine_color_term g:indentLine_color_gui
+hi Conceal ctermfg=245
 
 " Local plugins
 Plug '~/Projects/vim-follow-my-lead'
@@ -387,7 +389,7 @@ endfunction
 " Sort imports on all modified Scala files
 nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| update")<CR>
 
-set completeopt+=menuone,noinsert
+set completeopt+=menuone,noselect,noinsert
 
 au BufEnter *.hs compiler ghc
 
@@ -477,11 +479,6 @@ noremap <leader>zs :botright vsplit term://sbt<cr>:startinsert<cr>
 " Start Ammonite in a terminal in a vertical split
 noremap <leader>za :botright vsplit term://ammonite<cr>:startinsert<cr>
 
-" Move to a different window when in the terminal
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
 
 let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
@@ -576,14 +573,35 @@ let ensime_server_v2=1
 
 let g:fzf_command_prefix='Fzf'
 
+command! -bang FzfLHist call fzf#run(fzf#wrap({
+\ 'source': map(filter(map(extend(map(range(bufnr('$'), 1, -1), 'bufname(v:val)'),
+\                                 v:oldfiles),
+\                          'fnamemodify(v:val, ":p")'),
+\                      'filereadable(v:val) && stridx(v:val, getcwd()) == 0'),
+\               'fnamemodify(v:val, ":.")'),
+\ 'options': '--prompt "LHist> " --exit-0'}, <bang>0))
+
 " fuzzy find buffers
 nnoremap <Tab> :FzfBuffers<cr>
 " fuzzy find files
 nnoremap <leader>o :FzfFiles<cr>
 " fuzzy find MRU
-nnoremap <leader>m :FzfHistory<cr>
+nnoremap <leader>m :FzfLHist<cr>
 " grep with ag
 nnoremap \ :FzfAg<SPACE>
 " bind K to grep word under cursor
 nnoremap <leader>k :FzfAg <C-R><C-W><CR>
+
+function! s:TermMappings()
+  if &ft == 'fzf'
+    return
+  endif
+  " Move to a different window when in the terminal
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+endfunction
+
+autocmd TermOpen * call <SID>TermMappings()
 
