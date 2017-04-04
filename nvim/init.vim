@@ -593,15 +593,20 @@ nnoremap \ :FzfAg<SPACE>
 nnoremap <leader>k :FzfAg <C-R><C-W><CR>
 
 function! s:TermMappings()
-  if &ft == 'fzf'
-    return
-  endif
   " Move to a different window when in the terminal
-  tnoremap <C-h> <C-\><C-n><C-w>h
-  tnoremap <C-j> <C-\><C-n><C-w>j
-  tnoremap <C-k> <C-\><C-n><C-w>k
-  tnoremap <C-l> <C-\><C-n><C-w>l
+  tnoremap <buffer> <C-h> <C-\><C-n><C-w>h
+  tnoremap <buffer> <C-j> <C-\><C-n><C-w>j
+  tnoremap <buffer> <C-k> <C-\><C-n><C-w>k
+  tnoremap <buffer> <C-l> <C-\><C-n><C-w>l
+endfunction
+
+function! s:FzfUnmap()
+  silent! tunmap <buffer> <C-h>
+  silent! tunmap <buffer> <C-j>
+  silent! tunmap <buffer> <C-k>
+  silent! tunmap <buffer> <C-l>
 endfunction
 
 autocmd TermOpen * call <SID>TermMappings()
+autocmd FileType fzf call <SID>FzfUnmap()
 
