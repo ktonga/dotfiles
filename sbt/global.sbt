@@ -12,5 +12,3 @@ initialCommands in (Test, console) := """ammonite.Main().run()"""
 
 ensimeIgnoreMissingDirectories in ThisBuild := true
 
-ensimeServerVersion in ThisBuild := "2.0.0-SNAPSHOT"
-
