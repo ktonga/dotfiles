@@ -12,6 +12,7 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
+Plug 'mileszs/ack.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -19,7 +20,7 @@ Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 
 " Bars, panels, and files
-Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-vinegar'
 Plug 'bling/vim-airline'
 Plug 'majutsushi/tagbar'
 Plug 'romainl/vim-qf'
@@ -338,13 +339,10 @@ nmap <leader>p "ap
 " Paste from register 'a'
 vmap <leader>p "ap
 
-" Close nerdtree after a file is selected
-let NERDTreeQuitOnOpen = 1
-
-" Open NERDTree and focus current file
-nmap <silent> <leader>f <ESC>:NERDTreeFind<CR>
-" Toggle NERDTree window
-nmap <silent> <leader>t <ESC>:NERDTreeToggle<CR>
+" Open explore on current file directory
+nmap <silent> <leader>xx <ESC>:Explore<CR>
+" Toggle left explore window
+nmap <silent> <leader>xl <ESC>:20Lexplore<CR>
 
 
 let g:extradite_width = 60
@@ -471,14 +469,13 @@ tnoremap <leader><Esc> <C-\><C-n>
 tnoremap <leader>l <C-\><C-l>
 
 " Open a terminal in a vertical split
-noremap <leader>z :botright vsplit term://zsh<cr>:startinsert<cr>
+noremap <leader>zz :botright vsplit term://zsh<cr>:startinsert<cr>
 
 " Start SBT in a terminal in a vertical split
 noremap <leader>zs :botright vsplit term://sbt<cr>:startinsert<cr>
 
-" Start Ammonite in a terminal in a vertical split
-noremap <leader>za :botright vsplit term://ammonite<cr>:startinsert<cr>
-
+" Start Ranger on current file's dir in a terminal in a horizontal split
+noremap <leader>zr :rightbelow split term://ranger --selectfile %<cr>:startinsert<cr>
 
 let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
@@ -569,7 +566,7 @@ call <SID>ChangeListenAddress()
 
 set inccommand=split
 
-let ensime_server_v2=1
+let g:ensime_server_v2=1
 
 let g:fzf_command_prefix='Fzf'
 
@@ -584,13 +581,11 @@ command! -bang FzfLHist call fzf#run(fzf#wrap({
 " fuzzy find buffers
 nnoremap <Tab> :FzfBuffers<cr>
 " fuzzy find files
-nnoremap <leader>o :FzfFiles<cr>
-" fuzzy find MRU
-nnoremap <leader>m :FzfLHist<cr>
-" grep with ag
-nnoremap \ :FzfAg<SPACE>
-" bind K to grep word under cursor
-nnoremap <leader>k :FzfAg <C-R><C-W><CR>
+nnoremap <leader>ff :FzfFiles<cr>
+" fuzzy find history
+nnoremap <leader>fh :FzfLHist<cr>
+" grep with fzf ag
+nnoremap <leader>fg :FzfAg<SPACE>
 
 function! s:TermMappings()
   " Move to a different window when in the terminal
@@ -609,4 +604,15 @@ endfunction
 
 autocmd TermOpen * call <SID>TermMappings()
 autocmd FileType fzf call <SID>FzfUnmap()
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep --smart-case'                                                   
+endif
+
+" grep with ag
+nnoremap \ :Ack!<SPACE>
+" grep word under cursor
+nnoremap <leader>aw :Ack! <C-R><C-W><CR>
+" grep by filename
+nnoremap <leader>af :AckFile!<SPACE>
 
