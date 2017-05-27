@@ -20,7 +20,7 @@ Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 
 " Bars, panels, and files
-Plug 'tpope/vim-vinegar'
+Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
 Plug 'majutsushi/tagbar'
 Plug 'romainl/vim-qf'
@@ -339,10 +339,13 @@ nmap <leader>p "ap
 " Paste from register 'a'
 vmap <leader>p "ap
 
-" Open explore on current file directory
-nmap <silent> <leader>xx <ESC>:Explore<CR>
-" Toggle left explore window
-nmap <silent> <leader>xl <ESC>:20Lexplore<CR>
+" Close nerdtree after a file is selected
+let NERDTreeQuitOnOpen = 1
+
+" Open NERDTree and focus current file
+nmap <silent> <leader>xx <ESC>:NERDTreeFind<CR>
+" Toggle NERDTree window
+nmap <silent> <leader>xl <ESC>:NERDTreeToggle<CR>
 
 
 let g:extradite_width = 60
