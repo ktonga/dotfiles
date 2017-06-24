@@ -154,7 +154,6 @@ vnoremap <expr>y "my\"" . v:register . "y`y"
 
 " Use more readable color scheme by default.
 " It works well with `:set colorline` option.
-set termguicolors
 colorscheme wombat256mod
 
 " Make Conceal colors readable
