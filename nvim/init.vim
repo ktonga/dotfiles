@@ -548,6 +548,7 @@ function! s:MarkdownSettings()
 endfunction
 
 let g:oblique#incsearch_highlight_all=1
+let g:oblique#prefix='\v'
 
 autocmd FileType scala call <SID>EnMappings()
 
@@ -621,7 +622,7 @@ autocmd TermOpen * call <SID>TermMappings()
 autocmd FileType fzf call <SID>FzfUnmap()
 
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep --smart-case'                                                   
+  let g:ackprg = 'ag --vimgrep --smart-case'
 endif
 
 " grep with ag
