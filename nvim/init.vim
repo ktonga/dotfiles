@@ -53,17 +53,16 @@ Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Haskell
 Plug 'dag/vim2hs'
-Plug 'lukerandall/haskellmode-vim'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'Twinside/vim-hoogle'
-Plug 'enomsg/vim-haskellConcealPlus'
+Plug 'alx741/vim-hindent'
 
 " Scala
 Plug 'derekwyatt/vim-sbt'
 Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
-Plug '~/Projects/ensime-vim'
+Plug '~/Projects/contrib/ensime-vim'
 
 " Python
 Plug 'zchee/deoplete-jedi'
@@ -74,7 +73,7 @@ unlet! g:indentLine_color_term g:indentLine_color_gui
 hi Conceal ctermfg=245
 
 " Local plugins
-Plug '~/Projects/vim-follow-my-lead'
+Plug '~/Projects/personal/vim-follow-my-lead'
 Plug '~/.vim/bundle/vim-sbtquickfix'
 
 " Add plugins to &runtimepath
@@ -392,12 +391,8 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 
 set completeopt+=menuone,noselect,noinsert
 
-au BufEnter *.hs compiler ghc
-
 let g:haddock_browser = $BROWSER
 
-" Disable haskell-vim omnifunc
-let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " Show types in completion suggestions
@@ -405,12 +400,12 @@ let g:necoghc_enable_detailed_browse = 1
 
 " Type of expression under cursor
 nmap <silent> <leader>ht :GhcModType<CR>
+" Clear type selection
+nmap <silent> <leader>hl :GhcModTypeClear<CR>
 " Insert type of expression under cursor
 nmap <silent> <leader>hT :GhcModTypeInsert<CR>
-" GHC errors and warnings
-nmap <silent> <leader>hc :Neomake! ghc_mod<CR>
-" Haskell Lint
-nmap <silent> <leader>hl :Neomake! hlint<CR>
+" GHC Mod errors and lint async
+nmap <silent> <leader>hm :GhcModCheckAndLintAsync<CR>
 
 " Hoogle the word under the cursor
 nnoremap <silent> <leader>hh :Hoogle<CR>
