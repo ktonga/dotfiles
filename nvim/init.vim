@@ -69,8 +69,6 @@ Plug 'zchee/deoplete-jedi'
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
-unlet! g:indentLine_color_term g:indentLine_color_gui
-hi Conceal ctermfg=245
 
 " Local plugins
 Plug '~/Projects/personal/vim-follow-my-lead'
@@ -159,6 +157,9 @@ vnoremap <expr>y "my\"" . v:register . "y`y"
 " It works well with `:set colorline` option.
 set termguicolors
 colorscheme wombat256mod
+
+" Make Conceal colors readable
+hi Conceal guifg=White guibg=Normal
 
 let g:airline_powerline_fonts = 1
 
@@ -375,7 +376,7 @@ function! CommittedFiles()
     call add(qf_list, qf_item)
   endfor
   " Fill quickfix list with them
-  call setqflist(qf_list, '')
+  call setqflist(qf_list, 'r')
 endfunction
 
 " Show list of last-committed files
@@ -459,6 +460,9 @@ noremap gP P
 
 " Spelling highlight when in current line
 hi SpellBad cterm=underline
+
+" Unlimited scrollback for terminal
+set scrollback=-1
 
 " Send Esc to vim when in the terminal
 tnoremap <leader><Esc> <C-\><C-n>
@@ -586,6 +590,7 @@ nnoremap <leader>fh :FzfLHist<cr>
 nnoremap <leader>fg :FzfAg<SPACE>
 
 function! s:TermMappings()
+  setlocal nonumber
   " Move to a different window when in the terminal
   tnoremap <buffer> <C-h> <C-\><C-n><C-w>h
   tnoremap <buffer> <C-j> <C-\><C-n><C-w>j
