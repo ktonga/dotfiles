@@ -49,7 +49,6 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " Markdown support (depends on tabular)
 Plug 'plasticboy/vim-markdown'
-Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Haskell
 Plug 'dag/vim2hs'
@@ -437,6 +436,11 @@ vnoremap <silent> <leader>h> :call Pointful()<CR>
 
 inoremap jk <Esc>
 
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
 nnoremap <Leader>ev :edit $MYVIMRC<Cr>
 
 nnoremap <silent> <leader>qq :botright cwindow<cr>
@@ -478,6 +482,9 @@ noremap <leader>zs :botright vsplit term://sbt<cr>:startinsert<cr>
 
 " Start Ranger on current file's dir in a terminal in a horizontal split
 noremap <leader>zr :rightbelow split term://ranger --selectfile %<cr>:startinsert<cr>
+
+" Start Grip on current file in a terminal in a horizontal split
+noremap <leader>zg :rightbelow 5split term://grip -b '%'<cr>
 
 let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
@@ -532,8 +539,14 @@ let g:deoplete#omni#input_patterns = {}
 "   \ '^import .*'
 "   \]
 
-let vim_markdown_preview_toggle=3
-let vim_markdown_preview_github=1
+let g:vim_markdown_toc_autofit = 1
+
+autocmd FileType markdown call <SID>MarkdownSettings()
+
+function! s:MarkdownSettings()
+  setlocal wrap
+  setlocal conceallevel=2
+endfunction
 
 let g:oblique#incsearch_highlight_all=1
 
