@@ -63,6 +63,9 @@ Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
 Plug '~/Projects/contrib/ensime-vim'
 
+" Fix Groovy indent (Jenkinsfile)
+Plug 'vim-scripts/groovyindent-unix'
+
 " Python
 Plug 'zchee/deoplete-jedi'
 
