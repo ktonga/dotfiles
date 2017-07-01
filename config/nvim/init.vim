@@ -159,8 +159,8 @@ vnoremap <expr>y "my\"" . v:register . "y`y"
 " It works well with `:set colorline` option.
 colorscheme wombat256mod
 
-" Make Conceal colors readable
-hi Conceal guifg=White guibg=Normal
+" Make Conceal colors readable (specific to wombat256mod)
+hi Conceal ctermfg=111 ctermbg=NONE guifg=White guibg=Normal
 
 let g:airline_powerline_fonts = 1
 
