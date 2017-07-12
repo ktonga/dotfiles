@@ -40,7 +40,7 @@ font pango:Helvetica Neue, FontAwesome 11
 floating_modifier $mod
 
 # Start a terminal
-bindsym $mod+Return exec konsole
+bindsym $mod+Return exec termite
 
 # Kill focused window
 bindsym $mod+q kill

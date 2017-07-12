@@ -304,9 +304,6 @@ augroup last_edit
        \ endif
 augroup END
 
-" Cursor shape
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-
 " Open window splits in various places
 " ------------------------------------
 " Open split to the left
