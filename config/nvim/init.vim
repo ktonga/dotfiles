@@ -141,6 +141,9 @@ endif
 " Support all kind of EOLs by default.
 set fileformats+=mac
 
+" Reload files modified outside vim
+au FocusGained * :checktime
+
 " `Ctrl-U` in insert mode deletes a lot. Use `Ctrl-G` u to first break undo,
 " so that you can undo `Ctrl-U` without undoing what you typed before it.
 inoremap <C-U> <C-G>u<C-U>
