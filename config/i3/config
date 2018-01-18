@@ -1,6 +1,8 @@
 # (No) Title Bars
 for_window [class="^.*"] border pixel 0
 
+# no_focus [class="^.*"]
+
 # Gaps
 gaps inner 20
 gaps outer 0
