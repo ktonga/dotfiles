@@ -13,6 +13,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'mileszs/ack.vim'
+Plug 'autozimu/LanguageClient-neovim', {'do': './install.sh' }
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -54,10 +55,12 @@ Plug 'plasticboy/vim-markdown' " depends on tabular
 
 " Haskell
 Plug 'dag/vim2hs'
-Plug 'eagletmt/ghcmod-vim'
-Plug 'eagletmt/neco-ghc'
-Plug 'Twinside/vim-hoogle'
+" Plug 'eagletmt/ghcmod-vim'
+" Plug 'eagletmt/neco-ghc'
+" Plug 'Twinside/vim-hoogle'
+" Plug 'meck/vim-brittany'
 Plug 'alx741/vim-hindent'
+Plug 'parsonsmatt/intero-neovim'
 
 " Scala
 Plug 'derekwyatt/vim-sbt'
@@ -395,36 +398,40 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 
 set completeopt+=menuone,noselect,noinsert
 
-let g:haddock_browser = $BROWSER
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['hie', '--lsp'],
+    \ }
 
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+" let g:haddock_browser = $BROWSER
+
+" autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " Show types in completion suggestions
-let g:necoghc_enable_detailed_browse = 1
+" let g:necoghc_enable_detailed_browse = 1
 
 " Type of expression under cursor
-nmap <silent> <leader>ht :GhcModType<CR>
+" nmap <silent> <leader>ht :GhcModType<CR>
 " Clear type selection
-nmap <silent> <leader>hl :GhcModTypeClear<CR>
+" nmap <silent> <leader>hl :GhcModTypeClear<CR>
 " Insert type of expression under cursor
-nmap <silent> <leader>hT :GhcModTypeInsert<CR>
+" nmap <silent> <leader>hT :GhcModTypeInsert<CR>
 " GHC Mod errors and lint async
-nmap <silent> <leader>hm :GhcModCheckAndLintAsync<CR>
+" nmap <silent> <leader>hm :GhcModCheckAndLintAsync<CR>
 
 " Hoogle the word under the cursor
-nnoremap <silent> <leader>hh :Hoogle<CR>
+" nnoremap <silent> <leader>hh :Hoogle<CR>
 
 " Hoogle and prompt for input
-nnoremap <leader>hH :Hoogle
+" nnoremap <leader>hH :Hoogle
 
 " Hoogle for detailed documentation (e.g. "Functor")
-nnoremap <silent> <leader>hi :HoogleInfo<CR>
+" nnoremap <silent> <leader>hi :HoogleInfo<CR>
 
 " Hoogle for detailed documentation and prompt for input
-nnoremap <leader>hI :HoogleInfo
+" nnoremap <leader>hI :HoogleInfo
 
 " Hoogle, close the Hoogle window
-nnoremap <silent> <leader>hz :HoogleClose<CR>
+" nnoremap <silent> <leader>hz :HoogleClose<CR>
 
 
 function! Pointfree()
@@ -437,6 +444,50 @@ function! Pointful()
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
 
+augroup haskellMappings
+  au!
+  " Maps for Haskell. Restrict to Haskell buffers so the bindings don't collide.
+
+  au FileType haskell setlocal formatexpr=LanguageClient_textDocument_rangeFormatting()
+
+  au FileType haskell nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+  au FileType haskell nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  au FileType haskell nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<CR>
+  au FileType haskell nnoremap <silent> <leader>sf :call LanguageClient_textDocument_formatting()<CR>
+
+  " Background process and window management
+  au FileType haskell nnoremap <silent> <leader>is :InteroStart<CR>
+  au FileType haskell nnoremap <silent> <leader>ik :InteroKill<CR>
+
+  " Open intero/GHCi split horizontally
+  au FileType haskell nnoremap <silent> <leader>io :InteroOpen<CR>
+  " Open intero/GHCi split vertically
+  au FileType haskell nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
+  au FileType haskell nnoremap <silent> <leader>ih :InteroHide<CR>
+
+  " Automatically reload on save
+  au BufWritePost *.hs InteroReload
+
+  " Load individual modules
+  au FileType haskell nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
+  au FileType haskell nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
+
+  " Type-related information
+  " Heads up! These next two differ from the rest.
+  au FileType haskell map <silent> <leader>it <Plug>InteroGenericType
+  au FileType haskell map <silent> <leader>iT <Plug>InteroType
+  au FileType haskell nnoremap <silent> <leader>iti :InteroTypeInsert<CR>
+
+  " Navigation
+  " au FileType haskell nnoremap <silent> <C-]> :InteroGoToDef<CR>
+
+  " Managing targets
+  " Prompts you to enter targets (no silent):
+  au FileType haskell nnoremap <leader>ist :InteroSetTargets<SPACE>
+augroup END
+
+" Intero starts automatically. Set this if you'd like to prevent that.
+" let g:intero_start_immediately = 0
 
 inoremap jk <Esc>
 
