@@ -2,8 +2,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Support bundles
 Plug 'jgdavey/tslime.vim'
-Plug 'Shougo/vimproc.vim'
-Plug 'neomake/neomake'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'w0rp/ale'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
@@ -16,6 +16,7 @@ Plug 'mileszs/ack.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 
@@ -47,8 +48,9 @@ Plug 'mrtazz/simplenote.vim'
 " Allow pane movement to jump out of vim into tmux
 Plug 'christoomey/vim-tmux-navigator'
 
-" Markdown support (depends on tabular)
-Plug 'plasticboy/vim-markdown'
+" better filetype support
+Plug 'plasticboy/vim-markdown' " depends on tabular
+" Plug 'elzr/vim-json'
 
 " Haskell
 Plug 'dag/vim2hs'
@@ -535,11 +537,11 @@ function! s:is_whitespace()
 endfunction
 
 let g:deoplete#omni#input_patterns = {}
-" let g:deoplete#omni#input_patterns.scala = [
-"   \ '[^. *\t]\.\w*',
-"   \ '[:\[,] ?\w*',
-"   \ '^import .*'
-"   \]
+let g:deoplete#omni#input_patterns.scala = [
+  \ '[^. *\t]\.\w*',
+  \ '[:\[,] ?\w*',
+  \ '^import .*'
+  \]
 
 let g:vim_markdown_toc_autofit = 1
 
@@ -550,6 +552,9 @@ function! s:MarkdownSettings()
   setlocal conceallevel=2
 endfunction
 
+" autocmd FileType json setlocal foldmethod=syntax
+autocmd FileType json setlocal foldmethod=indent
+
 let g:oblique#incsearch_highlight_all=1
 let g:oblique#prefix='\v'
 
@@ -558,6 +563,7 @@ autocmd FileType scala call <SID>EnMappings()
 function! s:EnMappings()
   nnoremap <buffer> <silent> <Leader>st :EnType<CR>
   xnoremap <buffer> <silent> <Leader>st :EnType selection<CR>
+  nnoremap <buffer> <silent> <Leader>su :EnUsages<CR>
   nnoremap <buffer> <silent> K :EnDocBrowse<CR>
   nnoremap <buffer> <silent> <C-]> :EnDeclaration<CR>
 endfunction
@@ -634,4 +640,6 @@ nnoremap \ :Ack!<SPACE>
 nnoremap <leader>aw :Ack! <C-R><C-W><CR>
 " grep by filename
 nnoremap <leader>af :AckFile!<SPACE>
+
+" let g:vim_json_syntax_conceal = 0
 
