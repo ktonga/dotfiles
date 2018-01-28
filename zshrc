@@ -98,6 +98,7 @@ unalias ag
 
 alias psgrep="ps aux | grep "
 alias ammonite="sbt test:console"
+alias latest_modified='find . -type f -printf "%T@ %p\n" | sort -rn | head -1 | cut -f2- -d" "'
 
 if [[ -a ~/.zsh_local.sh ]]; then
   source ~/.zsh_local.sh
