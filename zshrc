@@ -56,10 +56,7 @@ plugins=(vi-mode git debian fasd common-aliases history-substring-search docker 
 
 # User configuration
 
-MAVEN_HOME="/home/gaston/Apps/maven"
-
-PATH="/home/gaston/.local/bin:/home/gaston/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-PATH="$MAVEN_HOME/bin:$PATH"
+PATH="$HOME/.local/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 export PATH
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -94,7 +91,7 @@ export BROWSER='google-chrome'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-unalias ag
+#unalias ag
 
 alias psgrep="ps aux | grep "
 alias ammonite="sbt test:console"

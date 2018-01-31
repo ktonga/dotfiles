@@ -13,7 +13,7 @@ mouse_autohide = true
 # Length of the scrollback buffer, 0 disabled the scrollback buffer
 # and setting it to a negative value means "infinite scrollback"
 scrollback_lines = -1
-#search_wrap = true
+search_wrap = false
 #urgent_on_bell = true
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
@@ -45,10 +45,10 @@ scrollback_lines = -1
 #background = #3f3f3f
 
 # 10% background transparency (requires a compositor)
-background = rgba(33, 33, 33, 0.85)
+background = rgba(00, 00, 00, 0.60)
 
 # If unset, will reverse foreground and background
-highlight = #000000
+# highlight = #000000
 
 # Colors from color0 to color254 can be set
 color0 = #212121

@@ -13,7 +13,10 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'mileszs/ack.vim'
-Plug 'autozimu/LanguageClient-neovim', {'do': './install.sh' }
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -78,8 +81,9 @@ Plug 'zchee/deoplete-jedi'
 Plug 'vim-scripts/wombat256.vim'
 
 " Local plugins
-Plug '~/Projects/personal/vim-follow-my-lead'
-Plug '~/.vim/bundle/vim-sbtquickfix'
+Plug 'ktonga/vim-follow-my-lead'
+"Plug '~/Projects/personal/vim-follow-my-lead'
+"Plug '~/.vim/bundle/vim-sbtquickfix'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -399,8 +403,14 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 set completeopt+=menuone,noselect,noinsert
 
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'],
+    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-r', getcwd(), '-d', '--vomit'],
     \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+
+" Show error markers
+set signcolumn=yes
 
 " let g:haddock_browser = $BROWSER
 
@@ -443,6 +453,8 @@ function! Pointful()
   call setline('.', split(system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
+
+let g:intero_backend = {'command': './mafia repl'}
 
 augroup haskellMappings
   au!
