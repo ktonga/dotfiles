@@ -98,9 +98,9 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
 set $ws1  "1: Main"
-set $ws2  "2: Telstra"
-set $ws3  "3: Scala"
-set $ws4  "4: Haskell"
+set $ws2  "2: Watch"
+set $ws3  "3: Read"
+set $ws4  "4: Aux"
 set $ws5  "5: Aux"
 set $ws6  "6: Aux"
 set $ws7  "7: Aux"
@@ -198,7 +198,7 @@ exec --no-startup-id wmctrl -c Plasma
 for_window [title="Desktop — Plasma"] kill; floating enable; border none
 
 # Set the wallpaper
-exec_always feh --bg-fill '/home/gaston/Pictures/Wallpapers/spacex.jpg'
+exec_always feh --bg-fill '/home/gaston/Pictures/Wallpapers/nier-automata-3840x2160-best-games-sci-fi-ps4-9499.jpg'
 
 ## Avoid tiling popups, dropdown windows from plasma
 # for the first time, manually resize them, i3 will remember the setting for floating windows
