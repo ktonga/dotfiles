@@ -21,6 +21,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
 Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 
@@ -375,6 +376,7 @@ nmap <leader>gg :copen<CR>:GGrep
 nmap <leader>gl :Extradite!<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gb :Gblame<CR>
+nmap <leader>gf :Gcommit --fixup=
 
 function! CommittedFiles()
   " Clear quickfix list
@@ -478,7 +480,7 @@ augroup haskellMappings
   au FileType haskell nnoremap <silent> <leader>ih :InteroHide<CR>
 
   " Automatically reload on save
-  au BufWritePost *.hs InteroReload
+  " au BufWritePost *.hs InteroReload
 
   " Load individual modules
   au FileType haskell nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
@@ -499,7 +501,7 @@ augroup haskellMappings
 augroup END
 
 " Intero starts automatically. Set this if you'd like to prevent that.
-" let g:intero_start_immediately = 0
+let g:intero_start_immediately = 0
 
 inoremap jk <Esc>
 
