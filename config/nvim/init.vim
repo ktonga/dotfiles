@@ -69,7 +69,7 @@ Plug 'parsonsmatt/intero-neovim'
 Plug 'derekwyatt/vim-sbt'
 Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
-Plug '~/Projects/contrib/ensime-vim'
+Plug '~/Repos/contrib/ensime-vim'
 
 " Fix Groovy indent (Jenkinsfile)
 Plug 'vim-scripts/groovyindent-unix'
@@ -403,7 +403,7 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 set completeopt+=menuone,noselect,noinsert
 
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-r', getcwd(), '-d', '--vomit'],
+    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-d', '--vomit'],
     \ }
 
 " Automatically start language servers.
@@ -454,7 +454,9 @@ function! Pointful()
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
 
-let g:intero_backend = {'command': './mafia repl'}
+let g:ale_linters = {'haskell': []}
+
+let g:intero_backend = {'command': 'cabal repl'}
 
 augroup haskellMappings
   au!
@@ -478,7 +480,7 @@ augroup haskellMappings
   au FileType haskell nnoremap <silent> <leader>ih :InteroHide<CR>
 
   " Automatically reload on save
-  au BufWritePost *.hs InteroReload
+  " au BufWritePost *.hs InteroReload
 
   " Load individual modules
   au FileType haskell nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
@@ -499,7 +501,7 @@ augroup haskellMappings
 augroup END
 
 " Intero starts automatically. Set this if you'd like to prevent that.
-" let g:intero_start_immediately = 0
+let g:intero_start_immediately = 0
 
 inoremap jk <Esc>
 
