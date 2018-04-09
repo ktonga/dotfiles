@@ -21,6 +21,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
 Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 
@@ -375,6 +376,7 @@ nmap <leader>gg :copen<CR>:GGrep
 nmap <leader>gl :Extradite!<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gb :Gblame<CR>
+nmap <leader>gf :Gcommit --fixup=
 
 function! CommittedFiles()
   " Clear quickfix list
