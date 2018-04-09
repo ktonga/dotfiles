@@ -514,8 +514,15 @@ vnoremap k gk
 
 nnoremap <Leader>ev :edit $MYVIMRC<Cr>
 
+" Show quickfix window
 nnoremap <silent> <leader>qq :botright cwindow<cr>
+" Hide quickfix window
 nnoremap <silent> <leader>qc :cclose<cr>
+
+" Show location window
+nnoremap <silent> <leader>ll :botright lwindow<cr>
+" Hide location window
+nnoremap <silent> <leader>lc :lclose<cr>
 
 " Remap H and L (top, bottom of screen to left and right end of line)
 noremap H ^
@@ -702,11 +709,20 @@ if executable('ag')
 endif
 
 " grep with ag
-nnoremap \ :Ack!<SPACE>
+nnoremap \ :LAck!<SPACE>
 " grep word under cursor
-nnoremap <leader>aw :Ack! <C-R><C-W><CR>
+nnoremap <leader>aw :LAck! <C-R><C-W><CR>
 " grep by filename
-nnoremap <leader>af :AckFile!<SPACE>
+nnoremap <leader>af :LAckFile!<SPACE>
 
 " let g:vim_json_syntax_conceal = 0
+
+" copy current file relative path
+nnoremap <leader>cf :let @+=expand("%")<CR>
+" copy current file absolute path
+nnoremap <leader>cF :let @+=expand("%:p")<CR>
+" copy current file filename
+nnoremap <leader>ct :let @+=expand("%:t")<CR>
+" copy current file directory name
+nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
 
