@@ -56,6 +56,8 @@ plugins=(vi-mode git debian fasd common-aliases history-substring-search docker 
 
 # User configuration
 
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+
 PATH="$HOME/.local/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 PATH="$PATH:/snap/bin"
 export PATH
