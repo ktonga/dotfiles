@@ -406,6 +406,7 @@ set completeopt+=menuone,noselect,noinsert
 
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-d', '--vomit'],
+    \ 'scala': ['node', expand('~/bin/sbt-server-stdio.js')]
     \ }
 
 " Automatically start language servers.
@@ -456,7 +457,7 @@ function! Pointful()
 endfunction
 vnoremap <silent> <leader>h> :call Pointful()<CR>
 
-let g:ale_linters = {'haskell': []}
+let g:ale_linters = {'haskell': [], 'scala': []}
 
 let g:intero_backend = {'command': 'cabal repl'}
 
