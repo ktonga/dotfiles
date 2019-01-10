@@ -13,6 +13,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'mileszs/ack.vim'
+Plug 'dbmrq/vim-ditto'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -20,10 +21,14 @@ Plug 'autozimu/LanguageClient-neovim', {
 
 " Git
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim'
 Plug 'gregsexton/gitv', {'on': ['Gitv']}
 Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
+Plug 'christoomey/vim-conflicted'
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
 
 " Bars, panels, and files
 Plug 'scrooloose/nerdtree'
@@ -46,6 +51,7 @@ Plug 'Shougo/neosnippet'
 Plug 'honza/vim-snippets'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'tpope/vim-abolish'
+Plug 'AndrewRadev/linediff.vim'
 
 " Services
 Plug 'mrtazz/simplenote.vim'
@@ -55,16 +61,16 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " better filetype support
 Plug 'plasticboy/vim-markdown' " depends on tabular
+Plug 'LnL7/vim-nix'
+Plug 'dag/vim-fish'
 " Plug 'elzr/vim-json'
 
 " Haskell
 Plug 'dag/vim2hs'
-" Plug 'eagletmt/ghcmod-vim'
-" Plug 'eagletmt/neco-ghc'
-" Plug 'Twinside/vim-hoogle'
-" Plug 'meck/vim-brittany'
-Plug 'alx741/vim-hindent'
+Plug 'Twinside/vim-hoogle'
+Plug 'meck/vim-brittany'
 Plug 'parsonsmatt/intero-neovim'
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 
 " Scala
 Plug 'derekwyatt/vim-sbt'
@@ -335,7 +341,7 @@ nnoremap <Left> :bn<cr>
 nnoremap <BS> <C-^>
 
 " delete buffer without closing pane
-nnoremap <leader>d :Bd<cr>
+nnoremap <leader>bd :Bd<cr>
 
 nnoremap <C-p> <C-i>
 
@@ -405,9 +411,18 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 set completeopt+=menuone,noselect,noinsert
 
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-d', '--vomit'],
+    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-d'],
     \ 'scala': ['node', expand('~/bin/sbt-server-stdio.js')]
     \ }
+
+highlight clear SpellBad
+highlight clear SpellCap
+highlight SpellBad cterm=underline
+highlight SpellCap cterm=underline
+
+let g:ale_set_highlights=1
+let g:LanguageClient_diagnosticsEnable = 1
+let g:LanguageClient_changeThrottle = 1
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
@@ -432,19 +447,19 @@ set signcolumn=yes
 " nmap <silent> <leader>hm :GhcModCheckAndLintAsync<CR>
 
 " Hoogle the word under the cursor
-" nnoremap <silent> <leader>hh :Hoogle<CR>
+nnoremap <silent> <leader>hh :Hoogle<CR>
 
 " Hoogle and prompt for input
-" nnoremap <leader>hH :Hoogle
+nnoremap <leader>hH :Hoogle<SPACE>
 
 " Hoogle for detailed documentation (e.g. "Functor")
-" nnoremap <silent> <leader>hi :HoogleInfo<CR>
+nnoremap <silent> <leader>hi :HoogleInfo<CR>
 
 " Hoogle for detailed documentation and prompt for input
-" nnoremap <leader>hI :HoogleInfo
+nnoremap <leader>hI :HoogleInfo
 
 " Hoogle, close the Hoogle window
-" nnoremap <silent> <leader>hz :HoogleClose<CR>
+nnoremap <silent> <leader>hz :HoogleClose<CR>
 
 
 function! Pointfree()
@@ -469,30 +484,42 @@ augroup haskellMappings
 
   au FileType haskell nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
   au FileType haskell nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  au FileType haskell nnoremap <silent> <leader>ee :call LanguageClient#explainErrorAtPoint()<CR>
   au FileType haskell nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<CR>
-  au FileType haskell nnoremap <silent> <leader>sf :call LanguageClient_textDocument_formatting()<CR>
+  au FileType haskell nnoremap <silent> <leader>ws :call LanguageClient#workspace_symbol()<CR>
+  au FileType haskell nnoremap <silent> <leader>ds :call LanguageClient#textDocument_documentSymbol()<CR>
+  au FileType haskell nnoremap <silent> <leader>lr :call LanguageClient#textDocument_references()<CR>
 
   " Background process and window management
   au FileType haskell nnoremap <silent> <leader>is :InteroStart<CR>
+  " Kill Intero bg process
   au FileType haskell nnoremap <silent> <leader>ik :InteroKill<CR>
 
   " Open intero/GHCi split horizontally
   au FileType haskell nnoremap <silent> <leader>io :InteroOpen<CR>
+  " Open reload Intero ghci session
+  au FileType haskell nnoremap <silent> <leader>ir :InteroReload<CR>
   " Open intero/GHCi split vertically
-  au FileType haskell nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
+  au FileType haskell nnoremap <silent> <leader>iv :InteroOpen<CR><C-W>H
+  " Hide Intero window
   au FileType haskell nnoremap <silent> <leader>ih :InteroHide<CR>
 
   " Automatically reload on save
   " au BufWritePost *.hs InteroReload
 
-  " Load individual modules
+  " Load module in current file
   au FileType haskell nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
+  " Load current file
   au FileType haskell nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
 
   " Type-related information
   " Heads up! These next two differ from the rest.
+
+  " Show generic type
   au FileType haskell map <silent> <leader>it <Plug>InteroGenericType
+  " Show concrete type
   au FileType haskell map <silent> <leader>iT <Plug>InteroType
+  " Insert type of expression in the line above
   au FileType haskell nnoremap <silent> <leader>iti :InteroTypeInsert<CR>
 
   " Navigation
@@ -554,16 +581,19 @@ tnoremap <leader><Esc> <C-\><C-n>
 tnoremap <leader>l <C-\><C-l>
 
 " Open a terminal in a vertical split
-noremap <leader>zz :botright vsplit term://zsh<cr>:startinsert<cr>
+noremap <leader>tt :botright vsplit term://fish<cr>:startinsert<cr>
+
+" Open a terminal in a vertical split
+noremap <leader>tn :botright vsplit term://nix-shell --command fish<cr>:startinsert<cr>
 
 " Start SBT in a terminal in a vertical split
-noremap <leader>zs :botright vsplit term://sbt<cr>:startinsert<cr>
+noremap <leader>ts :botright vsplit term://sbt<cr>:startinsert<cr>
 
 " Start Ranger on current file's dir in a terminal in a horizontal split
-noremap <leader>zr :rightbelow split term://ranger --selectfile %<cr>:startinsert<cr>
+noremap <leader>tr :rightbelow split term://ranger --selectfile %<cr>:startinsert<cr>
 
 " Start Grip on current file in a terminal in a horizontal split
-noremap <leader>zg :rightbelow 5split term://grip -b '%'<cr>
+noremap <leader>tg :rightbelow 5split term://grip -b '%'<cr>
 
 let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
@@ -619,6 +649,11 @@ let g:deoplete#omni#input_patterns.scala = [
   \]
 
 let g:vim_markdown_toc_autofit = 1
+
+" Use autocmds to check your text automatically and keep the highlighting
+" up to date (easier):
+autocmd FileType markdown,text,tex DittoOn  " Turn on Ditto's autocmds
+nmap <leader>di <Plug>ToggleDitto           " Turn Ditto on and off
 
 autocmd FileType markdown call <SID>MarkdownSettings()
 
@@ -726,4 +761,6 @@ nnoremap <leader>cF :let @+=expand("%:p")<CR>
 nnoremap <leader>ct :let @+=expand("%:t")<CR>
 " copy current file directory name
 nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
+
+set stl+=%{ConflictedVersion()}
 
