@@ -7,3 +7,7 @@
 	tool = kdiff3
 [core]
 	askpass = /usr/bin/ksshaskpass
+[github]
+	user = ktonga
+[cola]
+	spellcheck = false
