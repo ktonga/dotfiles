@@ -9,11 +9,18 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'bkad/CamelCaseMotion'
-Plug 'Shougo/deoplete.nvim'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'mileszs/ack.vim'
 Plug 'dbmrq/vim-ditto'
+
+" Autocompletion
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-neosnippet'
+
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -80,9 +87,6 @@ Plug '~/Repos/contrib/ensime-vim'
 
 " Fix Groovy indent (Jenkinsfile)
 Plug 'vim-scripts/groovyindent-unix'
-
-" Python
-Plug 'zchee/deoplete-jedi'
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
@@ -411,7 +415,7 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 set completeopt+=menuone,noselect,noinsert
 
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp', '-l', '/tmp/hie.log', '-d'],
+    \ 'haskell': ['hie', '-l', '/tmp/hie.log', "-d"],
     \ 'scala': ['node', expand('~/bin/sbt-server-stdio.js')]
     \ }
 
@@ -474,7 +478,7 @@ vnoremap <silent> <leader>h> :call Pointful()<CR>
 
 let g:ale_linters = {'haskell': [], 'scala': []}
 
-let g:intero_backend = {'command': 'cabal repl'}
+let g:intero_backend = {'command': 'cabal new-repl'}
 
 augroup haskellMappings
   au!
@@ -575,10 +579,10 @@ hi SpellBad cterm=underline
 set scrollback=-1
 
 " Send Esc to vim when in the terminal
-tnoremap <leader><Esc> <C-\><C-n>
+tnoremap ;<Esc> <C-\><C-n>
 
 " Send Ctrl-L to vim when in the terminal
-tnoremap <leader>l <C-\><C-l>
+tnoremap ;l <C-\><C-l>
 
 " Open a terminal in a vertical split
 noremap <leader>tt :botright vsplit term://fish<cr>:startinsert<cr>
@@ -599,54 +603,22 @@ let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
 
 
-let g:deoplete#enable_at_startup = 1
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
-" Undo completion
-inoremap <expr><C-g> deoplete#mappings#undo_completion()
+set completeopt=noinsert,menuone,noselect
 
-" Redraw candidates
-inoremap <expr><C-l> deoplete#mappings#refresh()
+" Use <TAB> to select the popup menu:
+imap <expr> <Tab> pumvisible() ? "\<C-n>" : neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<Tab>"
+imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+imap <C-k> <Plug>(neosnippet_jump)
+
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu.
+imap <expr> <CR> ncm2_neosnippet#expand_or(pumvisible() ? "\<C-y>" : "\<CR>", 'n')
 
 " Ctrl-Space for omnicompletion
 inoremap <C-Space> <C-x><C-o>
-
-" <CR>: If popup menu visible, expand snippet or close popup with selection,
-"       Otherwise, check if within empty pair and use delimitMate.
-imap <silent><expr><CR> pumvisible() ?
-      \ (neosnippet#expandable() ? neosnippet#mappings#expand_impl()
-      \ : deoplete#mappings#close_popup())
-      \ : "\<CR>"
-
-" inoremap <silent><expr><CR> neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl() : "\<CR>"
-
-" <Tab> completion:
-" 1. If popup menu is visible, select and insert next item
-" 2. Otherwise, if within a snippet, jump to next input
-" 3. Otherwise, if preceding chars are whitespace, insert tab char
-" 4. Otherwise, start manual autocomplete
-imap <silent><expr><Tab> pumvisible() ? "\<C-n>"
-      \ : (neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl()
-      \ : (<SID>is_whitespace() ? "\<Tab>"
-      \ : deoplete#mappings#manual_complete()))
-
-smap <silent><expr><Tab> pumvisible() ? "\<C-n>"
-      \ : (neosnippet#expandable_or_jumpable() ? neosnippet#mappings#expand_or_jump_impl()
-      \ : (<SID>is_whitespace() ? "\<Tab>"
-      \ : deoplete#mappings#manual_complete()))
-
-imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:is_whitespace()
-  let col = col('.') - 1
-  return ! col || getline('.')[col - 1] =~? '\s'
-endfunction
-
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.scala = [
-  \ '[^. *\t]\.\w*',
-  \ '[:\[,] ?\w*',
-  \ '^import .*'
-  \]
 
 let g:vim_markdown_toc_autofit = 1
 
@@ -680,8 +652,6 @@ endfunction
 
 " disable all runtime snippets
 let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
-
-" let g:neosnippet#enable_completed_snippet = 1
 
 " Enable snipMate compatibility feature.
 let g:neosnippet#enable_snipmate_compatibility = 1
