@@ -52,14 +52,16 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(vi-mode git debian fasd common-aliases history-substring-search docker stack)
+plugins=(vi-mode git debian fasd common-aliases history-substring-search docker stack nix)
 
 # User configuration
 
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 
 PATH="$HOME/.local/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-PATH="$PATH:/snap/bin"
+PATH="$JAVA_HOME/bin:/snap/bin:$PATH"
+PATH="~/.npm-global/bin:$PATH"
+PATH="/opt/cabal/bin:$PATH"
 export PATH
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -77,7 +79,7 @@ source $ZSH/oh-my-zsh.sh
 
 export TMPDIR='/tmp/'
 export EDITOR='nvim'
-export BROWSER='google-chrome'
+export BROWSER='firefox'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -111,3 +113,9 @@ fi
 export FZF_DEFAULT_COMMAND='ag -g ""'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# added by Nix installer
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  source ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
