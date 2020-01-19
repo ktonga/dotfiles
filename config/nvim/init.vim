@@ -9,10 +9,14 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'bkad/CamelCaseMotion'
-Plug 'junegunn/vim-pseudocl'
-Plug 'junegunn/vim-oblique'
 Plug 'mileszs/ack.vim'
 Plug 'dbmrq/vim-ditto'
+Plug 'machakann/vim-highlightedyank'
+
+" Search
+Plug 'haya14busa/is.vim'
+Plug 'osyo-manga/vim-anzu'
+Plug 'haya14busa/vim-asterisk'
 
 " Autocompletion
 Plug 'roxma/nvim-yarp'
@@ -31,7 +35,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim'
 Plug 'gregsexton/gitv', {'on': ['Gitv']}
-Plug 'int3/vim-extradite'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-conflicted'
 Plug 'mattn/webapi-vim'
@@ -59,6 +62,7 @@ Plug 'honza/vim-snippets'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'tpope/vim-abolish'
 Plug 'AndrewRadev/linediff.vim'
+Plug 'junegunn/vim-easy-align'
 
 " Services
 Plug 'mrtazz/simplenote.vim'
@@ -75,7 +79,7 @@ Plug 'dag/vim-fish'
 " Haskell
 Plug 'dag/vim2hs'
 Plug 'Twinside/vim-hoogle'
-Plug 'meck/vim-brittany'
+" Plug 'meck/vim-brittany'
 Plug 'parsonsmatt/intero-neovim'
 Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 
@@ -297,6 +301,14 @@ set statusline+=%*
 hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
 hi! link Visual Search
 
+map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
+map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
+
+map *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
+map g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
+map #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
+map g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
+
 " Always focus on splited window.
 nnoremap <C-w>s <C-w>s<C-w>w
 nnoremap <C-w>v <C-w>v<C-w>w
@@ -368,25 +380,12 @@ nmap <silent> <leader>xx <ESC>:NERDTreeFind<CR>
 " Toggle NERDTree window
 nmap <silent> <leader>xl <ESC>:NERDTreeToggle<CR>
 
-
-let g:extradite_width = 60
-" Hide messy Ggrep output and copen automatically
-function! NonintrusiveGitGrep(term)
-  execute "copen"
-  " Map 't' to open selected item in new tab
-  execute "nnoremap <silent> <buffer> t <C-W><CR><C-W>T"
-  execute "silent! Ggrep " . a:term
-  execute "redraw!"
-endfunction
-
-command! -nargs=1 GGrep call NonintrusiveGitGrep(<q-args>)
 nmap <leader>gs :Gstatus<CR>
 nmap <leader>gts :tabedit %<CR>:Gstatus<CR>
-nmap <leader>gg :copen<CR>:GGrep
-nmap <leader>gl :Extradite!<CR>
+nmap <leader>gl :silent Gllog!<CR>
+nmap <leader>gL :silent Gllog! --<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gb :Gblame<CR>
-nmap <leader>gf :Gcommit --fixup=
 
 function! CommittedFiles()
   " Clear quickfix list
@@ -414,10 +413,12 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 
 set completeopt+=menuone,noselect,noinsert
 
-let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '-l', '/tmp/hie.log', "-d"],
-    \ 'scala': ['node', expand('~/bin/sbt-server-stdio.js')]
-    \ }
+" let g:LanguageClient_serverCommands = {
+"     \ 'haskell': ['ghcide', '--lsp']
+"     \ }
+"    \ 'haskell': ['hie', '-l', '/tmp/hie.log', "-d"]
+" ,
+"     \ 'scala': ['metals-vim']
 
 highlight clear SpellBad
 highlight clear SpellCap
@@ -426,7 +427,7 @@ highlight SpellCap cterm=underline
 
 let g:ale_set_highlights=1
 let g:LanguageClient_diagnosticsEnable = 1
-let g:LanguageClient_changeThrottle = 1
+let g:LanguageClient_changeThrottle = 0
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
@@ -478,21 +479,38 @@ vnoremap <silent> <leader>h> :call Pointful()<CR>
 
 let g:ale_linters = {'haskell': [], 'scala': []}
 
-let g:intero_backend = {'command': 'cabal new-repl'}
+let g:intero_backend = {'command': 'cabal v2-repl'}
+
+function! HaskellFormatImports()
+  go 1
+  normal V
+  /\v(^.)&(^(import)@!)&(^(\{)@!)&(^(module)@!)/-1
+  exe "'<,'>!stylish-haskell"
+  normal V
+endfunction
 
 augroup haskellMappings
   au!
   " Maps for Haskell. Restrict to Haskell buffers so the bindings don't collide.
 
-  au FileType haskell setlocal formatexpr=LanguageClient_textDocument_rangeFormatting()
+  au FileType haskell setlocal formatprg=brittany
+  au FileType haskell nnoremap <silent> <leader>fi :call HaskellFormatImports()<CR>
 
-  au FileType haskell nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-  au FileType haskell nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  au FileType haskell nnoremap <buffer> <silent> K :call LanguageClient_textDocument_hover()<CR>
+  au FileType haskell nnoremap <buffer> <silent> gd :call LanguageClient_textDocument_definition()<CR>
+
   au FileType haskell nnoremap <silent> <leader>ee :call LanguageClient#explainErrorAtPoint()<CR>
   au FileType haskell nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<CR>
   au FileType haskell nnoremap <silent> <leader>ws :call LanguageClient#workspace_symbol()<CR>
   au FileType haskell nnoremap <silent> <leader>ds :call LanguageClient#textDocument_documentSymbol()<CR>
   au FileType haskell nnoremap <silent> <leader>lr :call LanguageClient#textDocument_references()<CR>
+
+  " Start Ghcid
+  au FileType haskell nnoremap <silent> <leader>hg :Ghcid -c cabal v2-repl<CR>
+  " Start Ghcid on test package
+  au FileType haskell nnoremap <leader>ht :Ghcid -c cabal v2-repl test:tests
+  " Kill Ghcid
+  au FileType haskell nnoremap <silent> <leader>hk :GhcidKill<CR>
 
   " Background process and window management
   au FileType haskell nnoremap <silent> <leader>is :InteroStart<CR>
@@ -637,9 +655,6 @@ endfunction
 " autocmd FileType json setlocal foldmethod=syntax
 autocmd FileType json setlocal foldmethod=indent
 
-let g:oblique#incsearch_highlight_all=1
-let g:oblique#prefix='\v'
-
 autocmd FileType scala call <SID>EnMappings()
 
 function! s:EnMappings()
@@ -719,7 +734,7 @@ nnoremap \ :LAck!<SPACE>
 " grep word under cursor
 nnoremap <leader>aw :LAck! <C-R><C-W><CR>
 " grep by filename
-nnoremap <leader>af :LAckFile!<SPACE>
+nnoremap <leader>af :AckFile<SPACE>
 
 " let g:vim_json_syntax_conceal = 0
 
@@ -733,4 +748,10 @@ nnoremap <leader>ct :let @+=expand("%:t")<CR>
 nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
 
 set stl+=%{ConflictedVersion()}
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
