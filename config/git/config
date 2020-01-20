@@ -1,5 +1,8 @@
+[includeIf "gitdir:personal/"]
+        path = config-personal
+[includeIf "gitdir:work/"]
+        path = config-work
 [user]
-	email = gaston.tonietti@gmail.com
 	name = Gaston Tonietti
 [push]
 	default = simple
