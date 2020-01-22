@@ -319,14 +319,6 @@ augroup sourcing
   autocmd bufwritepost $MYVIMRC source $MYVIMRC
 augroup END
 
-" Open file prompt with current path
-nmap <leader>ep :e <C-R>=expand("%:p:h") . '/'<CR>
-
-" Open file prompt with home prefix
-nmap <leader>eh :e ~/
-" Open file prompt for SELECTED text
-vmap <leader>eh :e ~/Projects
-
 " Show undo tree
 nmap <silent> <leader>u :MundoToggle<CR>
 
