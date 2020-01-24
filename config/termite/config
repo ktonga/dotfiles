@@ -45,14 +45,14 @@ search_wrap = false
 #background = #3f3f3f
 
 # 10% background transparency (requires a compositor)
-background = rgba(00, 00, 00, 0.60)
+background = rgba(00, 00, 00, 0.70)
 
 # If unset, will reverse foreground and background
 # highlight = #000000
 
 # Colors from color0 to color254 can be set
 color0 = #212121
-color1 = #a75050
+color1 = #ce6262
 color2 = #60b48a
 color3 = #dfaf8f
 color4 = #758ca2
