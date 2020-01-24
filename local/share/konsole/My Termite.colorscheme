@@ -1,5 +1,8 @@
 [Background]
 Color=0,0,0
+MaxRandomHue=0
+MaxRandomSaturation=0
+MaxRandomValue=0
 
 [BackgroundFaint]
 Color=0,0,0
@@ -17,7 +20,7 @@ Color=33,33,33
 Color=112,144,128
 
 [Color1]
-Color=167,80,80
+Color=206,98,98
 
 [Color1Faint]
 Color=167,80,80
@@ -89,6 +92,7 @@ Color=220,220,204
 Color=220,220,204
 
 [General]
+Blur=false
 Description=My Termite
-Opacity=0.6
+Opacity=0.7
 Wallpaper=
