@@ -1,0 +1,5 @@
+package fasd
+package foreign-env
+package https://github.com/jhillyerd/plugin-git
+theme bobthefish
+theme default
