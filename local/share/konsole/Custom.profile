@@ -1,5 +1,6 @@
 [Appearance]
 ColorScheme=My Termite
+Font=Source Code Pro for Powerline,14,-1,5,50,0,0,0,0,0,Regular
 
 [General]
 Name=Custom
