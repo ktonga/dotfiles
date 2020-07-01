@@ -1,7 +1,7 @@
 .nvimlog
 .idea/
 *.iml
-target/
+**/target/
 *.swp
 *.log
 *.orig
