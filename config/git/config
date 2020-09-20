@@ -1,5 +1,5 @@
-[includeIf "gitdir:personal/"]
-        path = config-personal
+[includeIf "gitdir:github/ktonga/"]
+        path = config-github-ktonga
 [includeIf "gitdir:work/"]
         path = config-work
 [user]
