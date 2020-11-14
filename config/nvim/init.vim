@@ -3,7 +3,6 @@ call plug#begin('~/.config/nvim/plugged')
 " Support bundles
 Plug 'jgdavey/tslime.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'w0rp/ale'
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'tpope/vim-repeat'
@@ -12,6 +11,7 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'mileszs/ack.vim'
 Plug 'dbmrq/vim-ditto'
 Plug 'machakann/vim-highlightedyank'
+Plug 'ktonga/vim-follow-my-lead'
 
 " Search
 Plug 'haya14busa/is.vim'
@@ -20,15 +20,6 @@ Plug 'haya14busa/vim-asterisk'
 
 " Autocompletion
 Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-neosnippet'
-
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -74,31 +65,24 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'plasticboy/vim-markdown' " depends on tabular
 Plug 'LnL7/vim-nix'
 Plug 'dag/vim-fish'
+Plug 'sotte/presenting.vim'
 " Plug 'elzr/vim-json'
 
 " Haskell
 Plug 'dag/vim2hs'
 Plug 'Twinside/vim-hoogle'
-" Plug 'meck/vim-brittany'
-Plug 'parsonsmatt/intero-neovim'
 Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }
 
 " Scala
 Plug 'derekwyatt/vim-sbt'
 Plug 'derekwyatt/vim-scala'
 Plug 'GEverding/vim-hocon'
-Plug '~/Repos/contrib/ensime-vim'
 
 " Fix Groovy indent (Jenkinsfile)
 Plug 'vim-scripts/groovyindent-unix'
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
-
-" Local plugins
-Plug 'ktonga/vim-follow-my-lead'
-"Plug '~/Projects/personal/vim-follow-my-lead'
-"Plug '~/.vim/bundle/vim-sbtquickfix'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -153,14 +137,7 @@ set showcmd
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 
 " Delete comment character when joining commented lines
-if v:version > 703 || v:version == 703 && has("patch541")
-  set formatoptions+=j
-endif
-
-" Search upwards for tags file instead only locally
-if has('path_extra')
-  setglobal tags-=./tags tags^=./tags;
-endif
+set formatoptions+=j
 
 " Support all kind of EOLs by default.
 set fileformats+=mac
@@ -188,6 +165,11 @@ colorscheme wombat256mod
 
 " Make Conceal colors readable (specific to wombat256mod)
 hi Conceal ctermfg=111 ctermbg=NONE guifg=White guibg=Normal
+" Use pleasant but very visible search hilighting
+hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
+hi! link Visual Search
+" Fix hard to read color
+hi diffRemoved ctermfg=Red guifg=#242424
 
 let g:airline_powerline_fonts = 1
 
@@ -215,6 +197,7 @@ set wildmode=longest,full
 
 " Show line numbers on the sidebar.
 set number
+set signcolumn=yes
 
 " Disable any annoying beeps on errors.
 set noerrorbells
@@ -232,7 +215,7 @@ set noswapfile
 set undofile
 
 " Save up to 100 marks, enable capital marks.
-set viminfo='100,f1
+set shada='100,f1
 
 " Enable search highlighting.
 set hlsearch
@@ -240,12 +223,13 @@ set hlsearch
 " Ignore case when searching.
 set ignorecase
 
-" Show mode in statusbar, not separately.
-set noshowmode
-
 " Don't ignore case when search has capital letter
 " (although also don't ignore case by default).
 set smartcase
+
+
+" Show mode in statusbar, not separately.
+set noshowmode
 
 " Use dash as word separator.
 set iskeyword+=-
@@ -297,10 +281,6 @@ hi! link SignColumn LineNr
 set statusline+=%#warningmsg#
 set statusline+=%*
 
-" Use pleasant but very visible search hilighting
-hi Search ctermfg=white ctermbg=173 cterm=none guifg=#ffffff guibg=#e5786d gui=none
-hi! link Visual Search
-
 map n <Plug>(is-nohl)<Plug>(anzu-n-with-echo)
 map N <Plug>(is-nohl)<Plug>(anzu-N-with-echo)
 
@@ -346,12 +326,11 @@ nmap <leader>nj :rightbelow new<CR>
 nnoremap <Right> :bp<cr>
 nnoremap <Left> :bn<cr>
 
+" Alt buffer
 nnoremap <BS> <C-^>
 
 " delete buffer without closing pane
 nnoremap <leader>bd :Bd<cr>
-
-nnoremap <C-p> <C-i>
 
 function! SaveRegister()
   let @a = @"
@@ -359,10 +338,12 @@ endfunction
 
 " Save unamed register into register 'a'
 nmap <silent> <leader>a :call SaveRegister()<cr>
+" Append line to register 'a'
+nmap <leader>y "Ayy
 " Paste from register 'a'
 nmap <leader>p "ap
 " Paste from register 'a'
-vmap <leader>p "ap
+xmap <leader>p "ap
 
 " Close nerdtree after a file is selected
 let NERDTreeQuitOnOpen = 1
@@ -405,73 +386,10 @@ nnoremap <leader>ssi :call GitStatusDo("\.scala$", "call SortScalaImports() \| u
 
 set completeopt+=menuone,noselect,noinsert
 
-" let g:LanguageClient_serverCommands = {
-"     \ 'haskell': ['ghcide', '--lsp']
-"     \ }
-"    \ 'haskell': ['hie', '-l', '/tmp/hie.log', "-d"]
-" ,
-"     \ 'scala': ['metals-vim']
-
 highlight clear SpellBad
 highlight clear SpellCap
 highlight SpellBad cterm=underline
 highlight SpellCap cterm=underline
-
-let g:ale_set_highlights=1
-let g:LanguageClient_diagnosticsEnable = 1
-let g:LanguageClient_changeThrottle = 0
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-
-" Show error markers
-set signcolumn=yes
-
-" let g:haddock_browser = $BROWSER
-
-" autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-" Show types in completion suggestions
-" let g:necoghc_enable_detailed_browse = 1
-
-" Type of expression under cursor
-" nmap <silent> <leader>ht :GhcModType<CR>
-" Clear type selection
-" nmap <silent> <leader>hl :GhcModTypeClear<CR>
-" Insert type of expression under cursor
-" nmap <silent> <leader>hT :GhcModTypeInsert<CR>
-" GHC Mod errors and lint async
-" nmap <silent> <leader>hm :GhcModCheckAndLintAsync<CR>
-
-" Hoogle the word under the cursor
-nnoremap <silent> <leader>hh :Hoogle<CR>
-
-" Hoogle and prompt for input
-nnoremap <leader>hH :Hoogle<SPACE>
-
-" Hoogle for detailed documentation (e.g. "Functor")
-nnoremap <silent> <leader>hi :HoogleInfo<CR>
-
-" Hoogle for detailed documentation and prompt for input
-nnoremap <leader>hI :HoogleInfo
-
-" Hoogle, close the Hoogle window
-nnoremap <silent> <leader>hz :HoogleClose<CR>
-
-
-function! Pointfree()
-  call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
-endfunction
-vnoremap <silent> <leader>h. :call Pointfree()<CR>
-
-function! Pointful()
-  call setline('.', split(system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
-endfunction
-vnoremap <silent> <leader>h> :call Pointful()<CR>
-
-let g:ale_linters = {'haskell': [], 'scala': []}
-
-let g:intero_backend = {'command': 'cabal v2-repl'}
 
 function! HaskellFormatImports()
   go 1
@@ -485,67 +403,25 @@ augroup haskellMappings
   au!
   " Maps for Haskell. Restrict to Haskell buffers so the bindings don't collide.
 
-  au FileType haskell setlocal formatprg=brittany
-  au FileType haskell nnoremap <silent> <leader>fi :call HaskellFormatImports()<CR>
-
-  au FileType haskell nnoremap <buffer> <silent> K :call LanguageClient_textDocument_hover()<CR>
-  au FileType haskell nnoremap <buffer> <silent> gd :call LanguageClient_textDocument_definition()<CR>
-
-  au FileType haskell nnoremap <silent> <leader>ee :call LanguageClient#explainErrorAtPoint()<CR>
-  au FileType haskell nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<CR>
-  au FileType haskell nnoremap <silent> <leader>ws :call LanguageClient#workspace_symbol()<CR>
-  au FileType haskell nnoremap <silent> <leader>ds :call LanguageClient#textDocument_documentSymbol()<CR>
-  au FileType haskell nnoremap <silent> <leader>lr :call LanguageClient#textDocument_references()<CR>
+  " Hoogle the word under the cursor
+  nnoremap <silent> <leader>h :Hoogle<CR>
+  " Hoogle and prompt for input
+  nnoremap <leader>H :Hoogle<SPACE>
+  " Hoogle for detailed documentation (e.g. "Functor")
+  nnoremap <silent> <leader>i :HoogleInfo<CR>
+  " Hoogle for detailed documentation and prompt for input
+  nnoremap <leader>I :HoogleInfo
+  " Hoogle, close the Hoogle window
+  nnoremap <silent> <leader>z :HoogleClose<CR>
 
   " Start Ghcid
-  au FileType haskell nnoremap <silent> <leader>hg :Ghcid -c cabal v2-repl<CR>
+  au FileType haskell nnoremap <silent> <leader>hg :Ghcid -c cabal repl<CR>
   " Start Ghcid on test package
-  au FileType haskell nnoremap <leader>ht :Ghcid -c cabal v2-repl test:tests
+  au FileType haskell nnoremap <leader>ht :Ghcid -c cabal repl test:tests
   " Kill Ghcid
   au FileType haskell nnoremap <silent> <leader>hk :GhcidKill<CR>
 
-  " Background process and window management
-  au FileType haskell nnoremap <silent> <leader>is :InteroStart<CR>
-  " Kill Intero bg process
-  au FileType haskell nnoremap <silent> <leader>ik :InteroKill<CR>
-
-  " Open intero/GHCi split horizontally
-  au FileType haskell nnoremap <silent> <leader>io :InteroOpen<CR>
-  " Open reload Intero ghci session
-  au FileType haskell nnoremap <silent> <leader>ir :InteroReload<CR>
-  " Open intero/GHCi split vertically
-  au FileType haskell nnoremap <silent> <leader>iv :InteroOpen<CR><C-W>H
-  " Hide Intero window
-  au FileType haskell nnoremap <silent> <leader>ih :InteroHide<CR>
-
-  " Automatically reload on save
-  " au BufWritePost *.hs InteroReload
-
-  " Load module in current file
-  au FileType haskell nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
-  " Load current file
-  au FileType haskell nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
-
-  " Type-related information
-  " Heads up! These next two differ from the rest.
-
-  " Show generic type
-  au FileType haskell map <silent> <leader>it <Plug>InteroGenericType
-  " Show concrete type
-  au FileType haskell map <silent> <leader>iT <Plug>InteroType
-  " Insert type of expression in the line above
-  au FileType haskell nnoremap <silent> <leader>iti :InteroTypeInsert<CR>
-
-  " Navigation
-  " au FileType haskell nnoremap <silent> <C-]> :InteroGoToDef<CR>
-
-  " Managing targets
-  " Prompts you to enter targets (no silent):
-  au FileType haskell nnoremap <leader>ist :InteroSetTargets<SPACE>
 augroup END
-
-" Intero starts automatically. Set this if you'd like to prevent that.
-let g:intero_start_immediately = 0
 
 inoremap jk <Esc>
 
@@ -582,9 +458,6 @@ noremap P gP
 noremap gp p
 noremap gP P
 
-" Spelling highlight when in current line
-hi SpellBad cterm=underline
-
 " Unlimited scrollback for terminal
 set scrollback=-1
 
@@ -597,7 +470,7 @@ tnoremap ;l <C-\><C-l>
 " Open a terminal in a vertical split
 noremap <leader>tt :botright vsplit term://fish<cr>:startinsert<cr>
 
-" Open a terminal in a vertical split
+" Open a Nix shell in a vertical split
 noremap <leader>tn :botright vsplit term://nix-shell --command fish<cr>:startinsert<cr>
 
 " Start SBT in a terminal in a vertical split
@@ -612,30 +485,19 @@ noremap <leader>tg :rightbelow 5split term://grip -b '%'<cr>
 let g:scala_sort_across_groups=1
 let g:scala_first_party_namespaces='io\.simplemachines'
 
-
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
 set completeopt=noinsert,menuone,noselect
 
-" Use <TAB> to select the popup menu:
-imap <expr> <Tab> pumvisible() ? "\<C-n>" : neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)" : "\<Tab>"
-imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
 imap <C-k> <Plug>(neosnippet_jump)
-
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu.
-imap <expr> <CR> ncm2_neosnippet#expand_or(pumvisible() ? "\<C-y>" : "\<CR>", 'n')
 
 " Ctrl-Space for omnicompletion
 inoremap <C-Space> <C-x><C-o>
 
 let g:vim_markdown_toc_autofit = 1
 
-" Use autocmds to check your text automatically and keep the highlighting
-" up to date (easier):
-autocmd FileType markdown,text,tex DittoOn  " Turn on Ditto's autocmds
-nmap <leader>di <Plug>ToggleDitto           " Turn Ditto on and off
+" Turn on Ditto's autocmds
+autocmd FileType markdown,text,tex DittoOn
+" Turn Ditto on and off
+nmap <leader>di <Plug>ToggleDitto
 
 autocmd FileType markdown call <SID>MarkdownSettings()
 
@@ -646,16 +508,6 @@ endfunction
 
 " autocmd FileType json setlocal foldmethod=syntax
 autocmd FileType json setlocal foldmethod=indent
-
-autocmd FileType scala call <SID>EnMappings()
-
-function! s:EnMappings()
-  nnoremap <buffer> <silent> <Leader>st :EnType<CR>
-  xnoremap <buffer> <silent> <Leader>st :EnType selection<CR>
-  nnoremap <buffer> <silent> <Leader>su :EnUsages<CR>
-  nnoremap <buffer> <silent> K :EnDocBrowse<CR>
-  nnoremap <buffer> <silent> <C-]> :EnDeclaration<CR>
-endfunction
 
 " disable all runtime snippets
 let g:neosnippet#disable_runtime_snippets = { '_' : 1 }
@@ -676,8 +528,6 @@ endfunction
 call <SID>ChangeListenAddress()
 
 set inccommand=split
-
-let g:ensime_server_v2=1
 
 let g:fzf_command_prefix='Fzf'
 
@@ -727,8 +577,6 @@ nnoremap \ :LAck!<SPACE>
 nnoremap <leader>aw :LAck! <C-R><C-W><CR>
 " grep by filename
 nnoremap <leader>af :AckFile<SPACE>
-
-" let g:vim_json_syntax_conceal = 0
 
 " copy current file relative path
 nnoremap <leader>cf :let @+=expand("%")<CR>
