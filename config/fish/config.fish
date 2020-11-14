@@ -2,7 +2,7 @@ if not set -q MY_FISH_CONFIG
 
   set -xg MY_FISH_CONFIG 'done'
 
-  set -x PATH $HOME/.local/bin $HOME/bin /opt/cabal/bin $JAVA_HOME/bin /snap/bin $HOME/.npm-global/bin $PATH
+  set -x PATH $HOME/.cabal/bin $HOME/.local/bin $HOME/bin /opt/cabal/bin $JAVA_HOME/bin /snap/bin $HOME/.npm-global/bin $PATH
 
   # Nix
   if test -e ~/.nix-profile/etc/profile.d/nix.sh
