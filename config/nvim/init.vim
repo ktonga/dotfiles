@@ -1,7 +1,6 @@
 call plug#begin('~/.config/nvim/plugged')
 
 " Support bundles
-Plug 'jgdavey/tslime.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'moll/vim-bbye'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -81,6 +80,9 @@ Plug 'GEverding/vim-hocon'
 
 " Fix Groovy indent (Jenkinsfile)
 Plug 'vim-scripts/groovyindent-unix'
+
+" Database
+Plug 'tpope/vim-dadbod'
 
 " Colorscheme
 Plug 'vim-scripts/wombat256.vim'
