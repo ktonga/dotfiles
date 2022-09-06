@@ -1,7 +1,7 @@
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "onedarker"
+lvim.colorscheme = "vscode"
 
 lvim.leader = "space"
 vim.g.maplocalleader = ","
@@ -11,15 +11,16 @@ lvim.keys.visual_block_mode["J"] = false
 lvim.keys.visual_block_mode["K"] = false
 
 -- add your own keymapping
+lvim.keys.insert_mode["jk"] = "<esc>"
 lvim.keys.normal_mode["<C-s>"] = ":wa<cr>"
 lvim.keys.normal_mode["<Backspace>"] = "<C-^>"
--- lvim.keys.normal_mode["<Tab>"] = "<cmd>lua require('telescope.builtin').buffers({sort_mru = true})<CR>"
+lvim.keys.normal_mode["<Leader><Tab>"] = "<cmd>lua require('telescope.builtin').buffers({sort_mru = true})<CR>"
 lvim.keys.normal_mode["<Leader>sg"] = "<cmd>lua require('telescope.builtin').grep_string({word_match = '-w'})<CR>"
 lvim.keys.normal_mode["Y"] = "y$"
 lvim.keys.normal_mode["<S-h>"] = nil
 lvim.keys.normal_mode["<S-l>"] = nil
 lvim.keys.visual_mode["<S-l>"] = nil
-lvim.keys.normal_mode["<Left>"] =  ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<Left>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<Right>"] = ":BufferLineCycleNext<CR>"
 -- Harpoon
 lvim.keys.normal_mode["<Leader>m"] = "<cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>"
@@ -37,7 +38,16 @@ vim.api.nvim_set_keymap("v", "L", "g_", { noremap = true })
 
 vim.g.gitblame_enabled = 0
 
+lvim.builtin.terminal.open_mapping = "<C-t>"
+lvim.builtin.terminal.shell = "fish"
 lvim.builtin.which_key.mappings["P"] = { "<Cmd>Telescope projects<CR>", "Projects" }
+
+lvim.builtin.telescope.defaults.layout_strategy = 'horizontal'
+lvim.builtin.telescope.defaults.layout_config = {
+  prompt_position = 'top',
+  height = 0.80,
+  width = 0.90
+}
 
 -- Spectre
 lvim.builtin.which_key.mappings["S"] = { "<Cmd>lua require('spectre').open()<CR>", "Search & Replace" }
@@ -78,16 +88,16 @@ lvim.keys.visual_mode["<Leader>sw"] = "<cmd>lua require('spectre').open_visual()
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+-- lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.setup.view.width = 50
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
-  "c",
+  "fish",
   "javascript",
   "json",
   "lua",
@@ -96,7 +106,10 @@ lvim.builtin.treesitter.ensure_installed = {
   "css",
   "rust",
   "java",
+  "scala",
+  "haskell",
   "yaml",
+  "sql"
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -143,22 +156,26 @@ lvim.builtin.project.manual_mode = true
 --   }
 -- }
 
+vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
+-- vim.opt_global.shortmess:remove("F"):append("c")
+
 -- Additional Plugins
 lvim.plugins = {
-  {"tpope/vim-repeat"},
-  {"tpope/vim-abolish"},
-  {"tpope/vim-unimpaired"},
-  {"tpope/vim-surround", keys = {"c", "d", "y"}},
-  {"bkad/CamelCaseMotion"},
-  {"wellle/targets.vim"},
-  {"michaeljsmith/vim-indent-object"},
-  {"AndrewRadev/linediff.vim"},
-  {"junegunn/vim-easy-align"},
-  {"ThePrimeagen/harpoon"},
-  {"sindrets/diffview.nvim"},
+  { "Mofiqul/vscode.nvim" },
+  { "tpope/vim-repeat" },
+  { "tpope/vim-abolish" },
+  { "tpope/vim-unimpaired" },
+  { "tpope/vim-surround",             keys = { "c", "d", "y" } },
+  { "bkad/CamelCaseMotion" },
+  { "wellle/targets.vim" },
+  { "michaeljsmith/vim-indent-object" },
+  { "AndrewRadev/linediff.vim" },
+  { "junegunn/vim-easy-align" },
+  { "ThePrimeagen/harpoon" },
+  { "mbbill/undotree" },
   {
     "vim-scripts/ReplaceWithRegister",
-    setup = function()
+    init = function()
       vim.cmd([[
           nmap <Leader>r  <Plug>ReplaceWithRegisterOperator
           nmap <Leader>rr <Plug>ReplaceWithRegisterLine
@@ -168,79 +185,102 @@ lvim.plugins = {
   },
   {
     "scalameta/nvim-metals",
-    config = function()
-      vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
-      vim.opt_global.shortmess:remove("F"):append("c")
-
-      METALS_CONFIG = require("metals").bare_config()
-
-      METALS_CONFIG.settings = {
-        showImplicitArguments = true,
-        showInferredType = true,
-        excludedPackages = {},
-      }
-      METALS_CONFIG.init_options.statusBarProvider = "on"
-
-      ScalaLsp = function()
-
-        local bufmap = function(lhs, rhs)
-          vim.api.nvim_buf_set_keymap(0, "n", lhs, rhs, { noremap = true })
-        end
-
-        bufmap("gD", "<cmd>lua vim.lsp.buf.definition()<CR>")
-        bufmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-        bufmap("gI", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-        bufmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-        bufmap("gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-        bufmap("gl", "<cmd>lua require'lvim.lsp.handlers'.show_line_diagnostics()<CR>")
-        bufmap("[c", "<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
-        bufmap("]c", "<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
-        bufmap("<localleader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-        bufmap("<localleader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
-        bufmap("<localleader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-        bufmap("<localleader>ws", '<cmd>lua require"metals".worksheet_hover()<CR>')
-        bufmap("<localleader>a", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
-        bufmap("<localleader>d", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>") -- buffer diagnostics only
-        bufmap("<localleader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
-        bufmap("<localleader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
-
-        require("metals").initialize_or_attach(METALS_CONFIG)
-      end
-
-      vim.cmd([[
-        augroup lsp
-          autocmd!
-          autocmd FileType scala,sbt lua ScalaLsp()
-        augroup end
-      ]])
-
-      -- Need for symbol highlights to work correctly
-      vim.cmd([[
-        hi! link LspReferenceText CursorColumn
-        hi! link LspReferenceRead CursorColumn
-        hi! link LspReferenceWrite CursorColumn
-      ]])
-    end,
+    dependencies = "nvim-lua/plenary.nvim",
   },
   {
     "sindrets/diffview.nvim",
-    event = "BufRead",
+    dependencies = "nvim-lua/plenary.nvim",
+    init = function()
+      require("diffview").setup({
+        view = {
+          merge_tool = {
+            layout = "diff4_mixed",
+          }
+        }
+      })
+    end
   },
   {
     "f-person/git-blame.nvim",
     event = "BufRead",
     config = function()
-      vim.cmd "highlight default link gitblame SpecialComment"
+      vim.cmd("highlight default link gitblame SpecialComment")
     end,
   },
   {
     "windwp/nvim-spectre",
-    event = "BufRead",
-    config = function()
+    init = function()
       require("spectre").setup()
     end,
   },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    config = function()
+      require('git-conflict').setup()
+    end
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    build = "cd app && npm install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" }
+  }
 }
+
+local bufmap = function(lhs, rhs)
+  vim.api.nvim_buf_set_keymap(0, "n", lhs, rhs, { noremap = true })
+end
+
+local lsp_mappings = function()
+  bufmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+  bufmap("gD", "<cmd>lua vim.lsp.buf.definition()<CR>")
+  bufmap("gI", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+  bufmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+  bufmap("gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+  bufmap("gl", "<cmd>lua require'lvim.lsp.handlers'.show_line_diagnostics()<CR>")
+  bufmap("[c", "<cmd>lua vim.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
+  bufmap("]c", "<cmd>lua vim.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
+  bufmap("<localleader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+  bufmap("<localleader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+  bufmap("<localleader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+  bufmap("<localleader>ws", '<cmd>lua require"metals".worksheet_hover()<CR>')
+  bufmap("<localleader>a", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
+  bufmap("<localleader>d", "<cmd>lua vim.diagnostic.setloclist()<CR>") -- buffer diagnostics only
+  bufmap("<localleader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+  bufmap("<localleader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
+end
+
+local metals_config = require("metals").bare_config()
+print(metals_config)
+
+metals_config.settings = {
+  -- bloopVersion = "1.5.7",
+  serverVersion = "latest.snapshot",
+  showImplicitArguments = true,
+  showInferredType = true,
+  excludedPackages = {},
+}
+metals_config.init_options.statusBarProvider = "on"
+metals_config.on_attach = lsp_mappings
+
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt", "java" },
+  callback = function()
+    require("metals").initialize_or_attach(metals_config)
+  end,
+  group = nvim_metals_group,
+})
+
+-- Need for symbol highlights to work correctly
+vim.cmd([[
+  hi! link LspReferenceText CursorColumn
+  hi! link LspReferenceRead CursorColumn
+  hi! link LspReferenceWrite CursorColumn
+]])
 
 -- lvim.plugins = {
 --     {"folke/tokyonight.nvim"},
@@ -264,4 +304,3 @@ vim.opt.timeoutlen = 500
 vim.opt_global.inccommand = "split"
 
 vim.cmd([[call camelcasemotion#CreateMotionMappings("<localleader>")]])
-

@@ -10,3 +10,6 @@ if not set -q MY_FISH_CONFIG
 end
 
 set -xg TERM 'xterm-256color'
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/gaston.tonietti/google-cloud-sdk/path.fish.inc' ]; . '/Users/gaston.tonietti/google-cloud-sdk/path.fish.inc'; end
