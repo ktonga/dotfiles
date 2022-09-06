@@ -1,0 +1,1 @@
+/Users/gaston.tonietti/.fzf/shell/key-bindings.fish

@@ -19,7 +19,7 @@ lvim.keys.normal_mode["Y"] = "y$"
 lvim.keys.normal_mode["<S-h>"] = nil
 lvim.keys.normal_mode["<S-l>"] = nil
 lvim.keys.visual_mode["<S-l>"] = nil
-lvim.keys.normal_mode["<Left>"] =  ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<Left>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<Right>"] = ":BufferLineCycleNext<CR>"
 -- Harpoon
 lvim.keys.normal_mode["<Leader>m"] = "<cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>"
@@ -78,16 +78,16 @@ lvim.keys.visual_mode["<Leader>sw"] = "<cmd>lua require('spectre').open_visual()
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+-- lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.setup.view.width = 50
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
-  "c",
+  "fish",
   "javascript",
   "json",
   "lua",
@@ -96,7 +96,10 @@ lvim.builtin.treesitter.ensure_installed = {
   "css",
   "rust",
   "java",
+  "scala",
+  "haskell",
   "yaml",
+  "sql"
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -145,17 +148,17 @@ lvim.builtin.project.manual_mode = true
 
 -- Additional Plugins
 lvim.plugins = {
-  {"tpope/vim-repeat"},
-  {"tpope/vim-abolish"},
-  {"tpope/vim-unimpaired"},
-  {"tpope/vim-surround", keys = {"c", "d", "y"}},
-  {"bkad/CamelCaseMotion"},
-  {"wellle/targets.vim"},
-  {"michaeljsmith/vim-indent-object"},
-  {"AndrewRadev/linediff.vim"},
-  {"junegunn/vim-easy-align"},
-  {"ThePrimeagen/harpoon"},
-  {"sindrets/diffview.nvim"},
+  { "tpope/vim-repeat" },
+  { "tpope/vim-abolish" },
+  { "tpope/vim-unimpaired" },
+  { "tpope/vim-surround", keys = { "c", "d", "y" } },
+  { "bkad/CamelCaseMotion" },
+  { "wellle/targets.vim" },
+  { "michaeljsmith/vim-indent-object" },
+  { "AndrewRadev/linediff.vim" },
+  { "junegunn/vim-easy-align" },
+  { "ThePrimeagen/harpoon" },
+  { "sindrets/diffview.nvim" },
   {
     "vim-scripts/ReplaceWithRegister",
     setup = function()
@@ -193,14 +196,14 @@ lvim.plugins = {
         bufmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
         bufmap("gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
         bufmap("gl", "<cmd>lua require'lvim.lsp.handlers'.show_line_diagnostics()<CR>")
-        bufmap("[c", "<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
-        bufmap("]c", "<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
+        bufmap("[c", "<cmd>lua vim.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
+        bufmap("]c", "<cmd>lua vim.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
         bufmap("<localleader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
         bufmap("<localleader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
         bufmap("<localleader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
         bufmap("<localleader>ws", '<cmd>lua require"metals".worksheet_hover()<CR>')
         bufmap("<localleader>a", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
-        bufmap("<localleader>d", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>") -- buffer diagnostics only
+        bufmap("<localleader>d", "<cmd>lua vim.diagnostic.setloclist()<CR>") -- buffer diagnostics only
         bufmap("<localleader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
         bufmap("<localleader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
 
@@ -240,6 +243,13 @@ lvim.plugins = {
       require("spectre").setup()
     end,
   },
+  {
+    'akinsho/git-conflict.nvim',
+    tag = "*",
+    config = function()
+      require('git-conflict').setup()
+    end
+  }
 }
 
 -- lvim.plugins = {
@@ -264,4 +274,3 @@ vim.opt.timeoutlen = 500
 vim.opt_global.inccommand = "split"
 
 vim.cmd([[call camelcasemotion#CreateMotionMappings("<localleader>")]])
-
