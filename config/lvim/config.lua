@@ -13,7 +13,7 @@ lvim.keys.visual_block_mode["K"] = false
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":wa<cr>"
 lvim.keys.normal_mode["<Backspace>"] = "<C-^>"
--- lvim.keys.normal_mode["<Tab>"] = "<cmd>lua require('telescope.builtin').buffers({sort_mru = true})<CR>"
+lvim.keys.normal_mode["<Tab>"] = "<cmd>lua require('telescope.builtin').buffers({sort_mru = true})<CR>"
 lvim.keys.normal_mode["<Leader>sg"] = "<cmd>lua require('telescope.builtin').grep_string({word_match = '-w'})<CR>"
 lvim.keys.normal_mode["Y"] = "y$"
 lvim.keys.normal_mode["<S-h>"] = nil
@@ -158,7 +158,6 @@ lvim.plugins = {
   { "AndrewRadev/linediff.vim" },
   { "junegunn/vim-easy-align" },
   { "ThePrimeagen/harpoon" },
-  { "sindrets/diffview.nvim" },
   {
     "vim-scripts/ReplaceWithRegister",
     setup = function()
@@ -171,59 +170,61 @@ lvim.plugins = {
   },
   {
     "scalameta/nvim-metals",
-    config = function()
-      vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
-      vim.opt_global.shortmess:remove("F"):append("c")
+    -- TODO https://www.lunarvim.org/docs/languages/scala
+    --
+    -- config = function()
+    --   vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
+    --   vim.opt_global.shortmess:remove("F"):append("c")
 
-      METALS_CONFIG = require("metals").bare_config()
+    --   METALS_CONFIG = require("metals").bare_config()
 
-      METALS_CONFIG.settings = {
-        showImplicitArguments = true,
-        showInferredType = true,
-        excludedPackages = {},
-      }
-      METALS_CONFIG.init_options.statusBarProvider = "on"
+    --   METALS_CONFIG.settings = {
+    --     showImplicitArguments = true,
+    --     showInferredType = true,
+    --     excludedPackages = {},
+    --   }
+    --   METALS_CONFIG.init_options.statusBarProvider = "on"
 
-      ScalaLsp = function()
+    --   ScalaLsp = function()
 
-        local bufmap = function(lhs, rhs)
-          vim.api.nvim_buf_set_keymap(0, "n", lhs, rhs, { noremap = true })
-        end
+    --     local bufmap = function(lhs, rhs)
+    --       vim.api.nvim_buf_set_keymap(0, "n", lhs, rhs, { noremap = true })
+    --     end
 
-        bufmap("gD", "<cmd>lua vim.lsp.buf.definition()<CR>")
-        bufmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-        bufmap("gI", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-        bufmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-        bufmap("gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-        bufmap("gl", "<cmd>lua require'lvim.lsp.handlers'.show_line_diagnostics()<CR>")
-        bufmap("[c", "<cmd>lua vim.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
-        bufmap("]c", "<cmd>lua vim.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
-        bufmap("<localleader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-        bufmap("<localleader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
-        bufmap("<localleader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-        bufmap("<localleader>ws", '<cmd>lua require"metals".worksheet_hover()<CR>')
-        bufmap("<localleader>a", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
-        bufmap("<localleader>d", "<cmd>lua vim.diagnostic.setloclist()<CR>") -- buffer diagnostics only
-        bufmap("<localleader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
-        bufmap("<localleader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
+    --     bufmap("gD", "<cmd>lua vim.lsp.buf.definition()<CR>")
+    --     bufmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+    --     bufmap("gI", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+    --     bufmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+    --     bufmap("gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+    --     bufmap("gl", "<cmd>lua require'lvim.lsp.handlers'.show_line_diagnostics()<CR>")
+    --     bufmap("[c", "<cmd>lua vim.diagnostic.goto_prev { wrap = false, border = lvim.lsp.popup_border }<CR>")
+    --     bufmap("]c", "<cmd>lua vim.diagnostic.goto_next { wrap = false, border = lvim.lsp.popup_border }<CR>")
+    --     bufmap("<localleader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+    --     bufmap("<localleader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+    --     bufmap("<localleader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+    --     bufmap("<localleader>ws", '<cmd>lua require"metals".worksheet_hover()<CR>')
+    --     bufmap("<localleader>a", '<cmd>lua require"metals".open_all_diagnostics()<CR>')
+    --     bufmap("<localleader>d", "<cmd>lua vim.diagnostic.setloclist()<CR>") -- buffer diagnostics only
+    --     bufmap("<localleader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+    --     bufmap("<localleader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
 
-        require("metals").initialize_or_attach(METALS_CONFIG)
-      end
+    --     require("metals").initialize_or_attach(METALS_CONFIG)
+    --   end
 
-      vim.cmd([[
-        augroup lsp
-          autocmd!
-          autocmd FileType scala,sbt lua ScalaLsp()
-        augroup end
-      ]])
+    --   vim.cmd([[
+    --     augroup lsp
+    --       autocmd!
+    --       autocmd FileType scala,sbt lua ScalaLsp()
+    --     augroup end
+    --   ]])
 
-      -- Need for symbol highlights to work correctly
-      vim.cmd([[
-        hi! link LspReferenceText CursorColumn
-        hi! link LspReferenceRead CursorColumn
-        hi! link LspReferenceWrite CursorColumn
-      ]])
-    end,
+    --   -- Need for symbol highlights to work correctly
+    --   vim.cmd([[
+    --     hi! link LspReferenceText CursorColumn
+    --     hi! link LspReferenceRead CursorColumn
+    --     hi! link LspReferenceWrite CursorColumn
+    --   ]])
+    -- end,
   },
   {
     "sindrets/diffview.nvim",

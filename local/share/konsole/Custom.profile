@@ -1,5 +1,6 @@
 [Appearance]
-ColorScheme=My Termite
+ColorScheme=Solarized
+Font=SauceCodePro NFM,10,-1,5,50,0,0,0,0,0
 
 [General]
 Name=Custom
