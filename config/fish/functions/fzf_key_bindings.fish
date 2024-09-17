@@ -1,1 +1,1 @@
-/Users/gaston.tonietti/.fzf/shell/key-bindings.fish
+/opt/local/share/fzf/shell/key-bindings.fish
